@@ -1,0 +1,398 @@
+:root {
+  --catalog-blue: #1971f5;
+  --catalog-dark: #142033;
+  --catalog-muted: #748197;
+  --catalog-border: #e2e8f1;
+  --catalog-bg: #f4f7fb;
+  --catalog-card: #ffffff;
+}
+
+.ativelo-catalog-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 38px clamp(18px, 4vw, 58px) 70px;
+  color: var(--catalog-dark);
+  background:
+    radial-gradient(circle at 90% 10%, rgba(35, 123, 242, 0.09), transparent 28%),
+    var(--catalog-bg);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.ativelo-catalog-page * {
+  box-sizing: border-box;
+}
+
+.ativelo-catalog-page button,
+.ativelo-catalog-page input,
+.ativelo-catalog-page select,
+.ativelo-catalog-page textarea {
+  font: inherit;
+}
+
+.ativelo-catalog-header {
+  display: flex;
+  max-width: 1450px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin: 0 auto 28px;
+}
+
+.ativelo-catalog-header > div > button {
+  margin: 0 0 24px;
+  padding: 0;
+  border: 0;
+  color: var(--catalog-blue);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.ativelo-catalog-header > div > p {
+  margin: 0 0 7px;
+  color: var(--catalog-blue);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+
+.ativelo-catalog-header h1 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 52px);
+  letter-spacing: -1.8px;
+}
+
+.ativelo-catalog-header > div > span {
+  display: block;
+  max-width: 680px;
+  margin-top: 10px;
+  color: var(--catalog-muted);
+  line-height: 1.6;
+}
+
+.ativelo-catalog-header aside {
+  display: flex;
+  min-width: 240px;
+  flex-direction: column;
+  padding: 17px 19px;
+  border: 1px solid var(--catalog-border);
+  border-radius: 18px;
+  background: var(--catalog-card);
+  box-shadow: 0 18px 45px rgba(24, 42, 74, 0.08);
+}
+
+.ativelo-catalog-header aside small {
+  color: #8490a2;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-catalog-header aside strong {
+  margin-top: 5px;
+}
+
+.ativelo-catalog-header aside span {
+  margin-top: 3px;
+  color: var(--catalog-blue);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.ativelo-catalog-tabs {
+  display: grid;
+  max-width: 1450px;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 0 auto 22px;
+}
+
+.ativelo-catalog-tabs button {
+  display: flex;
+  min-height: 95px;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid var(--catalog-border);
+  border-radius: 17px;
+  color: #526075;
+  background: var(--catalog-card);
+  cursor: pointer;
+  text-align: left;
+}
+
+.ativelo-catalog-tabs button.active,
+.ativelo-catalog-tabs button:hover {
+  border-color: #7eb0fa;
+  color: #155fc7;
+  background: linear-gradient(145deg, #f7fbff, #eaf3ff);
+  box-shadow: 0 12px 30px rgba(23, 104, 219, 0.11);
+}
+
+.ativelo-catalog-tabs span {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-catalog-tabs strong {
+  color: var(--catalog-dark);
+  font-size: 28px;
+}
+
+.ativelo-catalog-content {
+  display: grid;
+  max-width: 1450px;
+  grid-template-columns: minmax(350px, 0.8fr) minmax(430px, 1.2fr);
+  gap: 20px;
+  margin: 0 auto;
+}
+
+.ativelo-catalog-panel {
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid var(--catalog-border);
+  border-radius: 22px;
+  background: var(--catalog-card);
+  box-shadow: 0 18px 45px rgba(24, 42, 74, 0.08);
+}
+
+.ativelo-catalog-panel.list {
+  min-height: 560px;
+}
+
+.ativelo-catalog-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 23px;
+}
+
+.ativelo-catalog-panel-heading span {
+  color: var(--catalog-blue);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+}
+
+.ativelo-catalog-panel-heading h2 {
+  margin: 5px 0 0;
+  font-size: 23px;
+}
+
+.ativelo-catalog-panel-heading > button {
+  padding: 8px 11px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--catalog-blue);
+  background: #edf5ff;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ativelo-catalog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ativelo-catalog-form label {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ativelo-catalog-form label > span {
+  color: #415066;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ativelo-catalog-form input,
+.ativelo-catalog-form select,
+.ativelo-catalog-form textarea {
+  width: 100%;
+  padding: 0 13px;
+  border: 1px solid #dce3ed;
+  border-radius: 12px;
+  outline: none;
+  color: #15243a;
+  background: #fbfcfe;
+}
+
+.ativelo-catalog-form input,
+.ativelo-catalog-form select {
+  min-height: 46px;
+}
+
+.ativelo-catalog-form textarea {
+  min-height: 110px;
+  padding-top: 12px;
+  resize: vertical;
+}
+
+.ativelo-catalog-form input:focus,
+.ativelo-catalog-form select:focus,
+.ativelo-catalog-form textarea:focus {
+  border-color: #4b91ef;
+  box-shadow: 0 0 0 4px rgba(23, 104, 219, 0.1);
+}
+
+.ativelo-catalog-row {
+  display: flex;
+  gap: 12px;
+}
+
+.ativelo-catalog-form > button[type="submit"] {
+  min-height: 48px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 13px;
+  color: #fff;
+  background: linear-gradient(135deg, #1971f5, #2a83ff);
+  box-shadow: 0 12px 24px rgba(23, 104, 219, 0.2);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.ativelo-catalog-form > button:disabled {
+  opacity: 0.65;
+}
+
+.ativelo-catalog-feedback {
+  padding: 12px 13px;
+  border-radius: 11px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ativelo-catalog-feedback.error {
+  color: #a52e2e;
+  background: #fff0f0;
+}
+
+.ativelo-catalog-feedback.success {
+  color: #12704c;
+  background: #eafaf3;
+}
+
+.ativelo-catalog-records {
+  display: flex;
+  max-height: 650px;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.ativelo-catalog-records > div {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--catalog-border);
+  border-radius: 15px;
+  background: #fbfcfe;
+}
+
+.ativelo-catalog-records i {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--catalog-blue);
+  background: #e9f2ff;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.ativelo-catalog-records > div > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-catalog-records strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-catalog-records small {
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--catalog-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-catalog-records b {
+  max-width: 145px;
+  overflow: hidden;
+  padding: 6px 8px;
+  border-radius: 9px;
+  color: #42618d;
+  background: #edf2f8;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-catalog-empty {
+  display: flex;
+  min-height: 390px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-direction: column;
+  padding: 25px;
+  border: 1px dashed #d8dfeb;
+  border-radius: 17px;
+  color: var(--catalog-muted);
+  text-align: center;
+}
+
+@media (max-width: 1000px) {
+  .ativelo-catalog-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .ativelo-catalog-page {
+    padding: 23px 15px 45px;
+  }
+
+  .ativelo-catalog-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ativelo-catalog-header aside {
+    min-width: 0;
+  }
+
+  .ativelo-catalog-tabs {
+    grid-template-columns: repeat(3, 150px);
+    overflow-x: auto;
+  }
+
+  .ativelo-catalog-panel {
+    padding: 20px 16px;
+  }
+
+  .ativelo-catalog-row {
+    flex-direction: column;
+  }
+}

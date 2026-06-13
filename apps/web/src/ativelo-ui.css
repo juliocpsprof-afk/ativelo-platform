@@ -1,0 +1,1213 @@
+:root {
+  --ativelo-navy-950: #07162f;
+  --ativelo-navy-900: #0b2147;
+  --ativelo-navy-800: #12356d;
+  --ativelo-blue-700: #145ce6;
+  --ativelo-blue-600: #1971f5;
+  --ativelo-blue-500: #2a83ff;
+  --ativelo-blue-100: #e9f2ff;
+  --ativelo-cyan-400: #27d4da;
+  --ativelo-green-600: #149a68;
+  --ativelo-orange-600: #db7518;
+  --ativelo-red-600: #dc4141;
+  --ativelo-slate-900: #142033;
+  --ativelo-slate-700: #4c5a70;
+  --ativelo-slate-500: #7c879a;
+  --ativelo-slate-300: #d8dfeb;
+  --ativelo-slate-200: #e7ebf2;
+  --ativelo-slate-100: #f4f7fb;
+  --ativelo-white: #ffffff;
+  --ativelo-shadow:
+    0 18px 45px rgba(24, 42, 74, 0.08),
+    0 3px 12px rgba(24, 42, 74, 0.04);
+}
+
+.ativelo-dashboard,
+.ativelo-locations-page {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--ativelo-slate-900);
+}
+
+.ativelo-dashboard * ,
+.ativelo-locations-page * {
+  box-sizing: border-box;
+}
+
+.ativelo-dashboard button,
+.ativelo-locations-page button,
+.ativelo-locations-page input,
+.ativelo-locations-page select {
+  font: inherit;
+}
+
+/* DASHBOARD */
+
+.ativelo-dashboard {
+  min-height: 100vh;
+  background: var(--ativelo-slate-100);
+}
+
+.ativelo-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 20;
+  display: flex;
+  width: 270px;
+  flex-direction: column;
+  padding: 28px 18px 20px;
+  overflow-y: auto;
+  color: #fff;
+  background:
+    radial-gradient(circle at 15% 12%, rgba(42, 131, 255, 0.27), transparent 30%),
+    linear-gradient(170deg, var(--ativelo-navy-800), var(--ativelo-navy-950) 70%);
+}
+
+.ativelo-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 10px 28px;
+}
+
+.ativelo-brand-mark {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 15px;
+  background: linear-gradient(
+    145deg,
+    var(--ativelo-blue-500),
+    var(--ativelo-cyan-400)
+  );
+  box-shadow: 0 10px 25px rgba(39, 212, 218, 0.18);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.ativelo-brand > div:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-brand strong {
+  font-size: 21px;
+  letter-spacing: -0.6px;
+}
+
+.ativelo-brand span {
+  margin-top: 2px;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-sidebar-nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ativelo-sidebar-nav button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 13px;
+  color: rgba(255, 255, 255, 0.68);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ativelo-sidebar-nav button:hover,
+.ativelo-sidebar-nav button.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.ativelo-sidebar-nav button.active {
+  box-shadow: inset 3px 0 0 var(--ativelo-cyan-400);
+}
+
+.ativelo-sidebar-nav button span {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  font-size: 18px;
+}
+
+.ativelo-sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 15px 10px 3px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ativelo-user-avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 12px;
+  color: #0d3971;
+  background: #d9edff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.ativelo-sidebar-footer > div:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-sidebar-footer strong {
+  font-size: 13px;
+}
+
+.ativelo-sidebar-footer span {
+  margin-top: 2px;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-dashboard-main {
+  min-height: 100vh;
+  margin-left: 270px;
+  padding: 34px 38px 55px;
+}
+
+.ativelo-dashboard-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 25px;
+}
+
+.ativelo-dashboard-topbar p {
+  margin: 0 0 5px;
+  color: var(--ativelo-blue-600);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+}
+
+.ativelo-dashboard-topbar h1 {
+  margin: 0;
+  font-size: clamp(27px, 3vw, 36px);
+  letter-spacing: -1.2px;
+}
+
+.ativelo-dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.ativelo-topbar-secondary,
+.ativelo-topbar-primary,
+.ativelo-topbar-icon {
+  min-height: 44px;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.ativelo-topbar-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 17px;
+  border: 1px solid var(--ativelo-slate-200);
+  color: #174c9f;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(20, 45, 85, 0.07);
+}
+
+.ativelo-topbar-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--ativelo-blue-600),
+    var(--ativelo-blue-500)
+  );
+  box-shadow: 0 12px 25px rgba(25, 113, 245, 0.22);
+}
+
+.ativelo-topbar-icon {
+  position: relative;
+  display: grid;
+  width: 44px;
+  place-items: center;
+  border: 1px solid var(--ativelo-slate-200);
+  color: var(--ativelo-slate-700);
+  background: #fff;
+}
+
+.ativelo-topbar-icon i {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--ativelo-red-600);
+}
+
+.ativelo-hero {
+  position: relative;
+  display: grid;
+  min-height: 310px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
+  overflow: hidden;
+  border-radius: 28px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 78% 35%, rgba(39, 212, 218, 0.22), transparent 25%),
+    linear-gradient(130deg, #0b2f67 0%, #1056b6 57%, #197df0 100%);
+  box-shadow: 0 24px 55px rgba(17, 66, 143, 0.18);
+}
+
+.ativelo-hero > div:first-child {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  padding: 48px 52px;
+}
+
+.ativelo-hero-badge {
+  display: inline-flex;
+  padding: 7px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 999px;
+  color: #bfe4ff;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+}
+
+.ativelo-hero h2 {
+  max-width: 680px;
+  margin: 19px 0 13px;
+  font-size: clamp(29px, 4vw, 47px);
+  line-height: 1.04;
+  letter-spacing: -1.8px;
+}
+
+.ativelo-hero p {
+  max-width: 590px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.ativelo-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-top: 28px;
+}
+
+.ativelo-hero-actions button {
+  min-height: 46px;
+  padding: 0 19px;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.ativelo-hero-actions button:first-child {
+  color: var(--ativelo-navy-900);
+  background: #fff;
+}
+
+.ativelo-hero-actions button:last-child {
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ativelo-hero-visual {
+  position: relative;
+  min-height: 310px;
+}
+
+.ativelo-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ativelo-orbit.large {
+  width: 250px;
+  height: 250px;
+}
+
+.ativelo-orbit.small {
+  width: 185px;
+  height: 185px;
+}
+
+.ativelo-device {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 140px;
+  height: 90px;
+  place-items: center;
+  border: 5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  color: #fff;
+  background: rgba(3, 29, 67, 0.56);
+  box-shadow: 0 20px 35px rgba(4, 25, 58, 0.26);
+  transform: translate(-50%, -50%) rotate(-5deg);
+  font-size: 38px;
+  font-weight: 900;
+}
+
+.ativelo-chip {
+  position: absolute;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.13);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.ativelo-chip.chip-one {
+  top: 62px;
+  right: 62px;
+}
+
+.ativelo-chip.chip-two {
+  right: 30px;
+  bottom: 58px;
+}
+
+.ativelo-chip.chip-three {
+  bottom: 45px;
+  left: 22px;
+}
+
+.ativelo-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.ativelo-metric-card {
+  position: relative;
+  min-width: 0;
+  padding: 21px 22px;
+  overflow: hidden;
+  border: 1px solid var(--ativelo-slate-200);
+  border-radius: 19px;
+  background: #fff;
+  box-shadow: var(--ativelo-shadow);
+}
+
+.ativelo-metric-card > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  color: var(--ativelo-slate-700);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ativelo-metric-card i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.ativelo-metric-card.blue i {
+  background: var(--ativelo-blue-600);
+}
+
+.ativelo-metric-card.green i {
+  background: var(--ativelo-green-600);
+}
+
+.ativelo-metric-card.orange i {
+  background: var(--ativelo-orange-600);
+}
+
+.ativelo-metric-card.red i {
+  background: var(--ativelo-red-600);
+}
+
+.ativelo-metric-card > strong {
+  display: block;
+  margin: 13px 0 3px;
+  font-size: 31px;
+}
+
+.ativelo-metric-card p {
+  margin: 0;
+  color: var(--ativelo-slate-500);
+  font-size: 11px;
+}
+
+.ativelo-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(310px, 0.6fr);
+  gap: 20px;
+  margin-top: 21px;
+}
+
+.ativelo-panel {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--ativelo-slate-200);
+  border-radius: 21px;
+  background: #fff;
+  box-shadow: var(--ativelo-shadow);
+}
+
+.ativelo-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.ativelo-panel-heading span {
+  color: var(--ativelo-blue-600);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+}
+
+.ativelo-panel-heading h3 {
+  margin: 5px 0 0;
+  font-size: 18px;
+}
+
+.ativelo-panel-heading > button {
+  padding: 5px;
+  border: 0;
+  color: var(--ativelo-blue-600);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.ativelo-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ativelo-quick-grid > button {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid var(--ativelo-slate-200);
+  border-radius: 16px;
+  color: var(--ativelo-slate-900);
+  background: #fbfcfe;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ativelo-quick-grid i {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--ativelo-blue-700);
+  background: var(--ativelo-blue-100);
+  font-style: normal;
+  font-weight: 900;
+}
+
+.ativelo-quick-grid > button > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-quick-grid strong {
+  font-size: 13px;
+}
+
+.ativelo-quick-grid small {
+  margin-top: 4px;
+  color: var(--ativelo-slate-500);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.ativelo-quick-grid b {
+  color: #9aa7b9;
+  font-size: 24px;
+}
+
+.ativelo-empty {
+  display: flex;
+  min-height: 185px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 22px;
+  border: 1px dashed var(--ativelo-slate-300);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.ativelo-empty > i {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 13px;
+  place-items: center;
+  border-radius: 15px;
+  color: var(--ativelo-blue-600);
+  background: var(--ativelo-blue-100);
+  font-style: normal;
+}
+
+.ativelo-empty strong {
+  font-size: 13px;
+}
+
+.ativelo-empty p {
+  max-width: 360px;
+  margin: 7px 0 16px;
+  color: var(--ativelo-slate-500);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.ativelo-empty button {
+  min-height: 40px;
+  padding: 0 15px;
+  border: 1px solid var(--ativelo-slate-300);
+  border-radius: 12px;
+  color: var(--ativelo-blue-700);
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.ativelo-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ativelo-status-list > div {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--ativelo-slate-200);
+}
+
+.ativelo-status-list > div:last-child {
+  border-bottom: 0;
+}
+
+.ativelo-status-list i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.ativelo-status-list i.online {
+  background: #21b47e;
+}
+
+.ativelo-status-list i.pending {
+  background: #e5a230;
+}
+
+.ativelo-status-list span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-status-list strong {
+  font-size: 12px;
+}
+
+.ativelo-status-list small {
+  margin-top: 3px;
+  color: var(--ativelo-slate-500);
+  font-size: 10px;
+}
+
+.ativelo-status-list b {
+  color: var(--ativelo-slate-500);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.ativelo-mobile-nav {
+  display: none;
+}
+
+/* LOCALIZAÃ‡Ã•ES */
+
+.ativelo-locations-page {
+  min-height: 100vh;
+  padding: 38px clamp(18px, 4vw, 58px) 70px;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(35, 123, 242, 0.09), transparent 28%),
+    var(--ativelo-slate-100);
+}
+
+.ativelo-locations-header {
+  display: flex;
+  max-width: 1450px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin: 0 auto 28px;
+}
+
+.ativelo-locations-header > div > button {
+  margin: 0 0 24px;
+  padding: 0;
+  border: 0;
+  color: var(--ativelo-blue-600);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.ativelo-locations-header > div > p {
+  margin: 0 0 7px;
+  color: var(--ativelo-blue-600);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+
+.ativelo-locations-header h1 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 52px);
+  letter-spacing: -1.8px;
+}
+
+.ativelo-locations-header > div > span {
+  display: block;
+  max-width: 680px;
+  margin-top: 10px;
+  color: #6f7d91;
+  line-height: 1.6;
+}
+
+.ativelo-locations-header aside {
+  display: flex;
+  min-width: 240px;
+  flex-direction: column;
+  padding: 17px 19px;
+  border: 1px solid var(--ativelo-slate-200);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--ativelo-shadow);
+}
+
+.ativelo-locations-header aside small {
+  color: #8490a2;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-locations-header aside strong {
+  margin-top: 5px;
+}
+
+.ativelo-locations-header aside span {
+  margin-top: 3px;
+  color: var(--ativelo-blue-600);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.ativelo-location-tabs {
+  display: grid;
+  max-width: 1450px;
+  grid-template-columns: repeat(7, minmax(110px, 1fr));
+  gap: 12px;
+  margin: 0 auto 22px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+}
+
+.ativelo-location-tabs button {
+  display: flex;
+  min-width: 110px;
+  min-height: 95px;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid var(--ativelo-slate-200);
+  border-radius: 17px;
+  color: #526075;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ativelo-location-tabs button.active,
+.ativelo-location-tabs button:hover {
+  border-color: #7eb0fa;
+  color: #155fc7;
+  background: linear-gradient(145deg, #f7fbff, #eaf3ff);
+  box-shadow: 0 12px 30px rgba(23, 104, 219, 0.11);
+}
+
+.ativelo-location-tabs span {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-location-tabs strong {
+  color: var(--ativelo-slate-900);
+  font-size: 28px;
+}
+
+.ativelo-locations-content {
+  display: grid;
+  max-width: 1450px;
+  grid-template-columns: minmax(330px, 0.75fr) minmax(420px, 1.25fr);
+  gap: 20px;
+  margin: 0 auto;
+}
+
+.ativelo-location-panel {
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid var(--ativelo-slate-200);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: var(--ativelo-shadow);
+}
+
+.ativelo-location-panel.list {
+  min-height: 520px;
+}
+
+.ativelo-location-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 23px;
+}
+
+.ativelo-location-panel-heading span {
+  color: var(--ativelo-blue-600);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+}
+
+.ativelo-location-panel-heading h2 {
+  margin: 5px 0 0;
+  font-size: 23px;
+}
+
+.ativelo-location-panel-heading > button {
+  padding: 8px 11px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--ativelo-blue-600);
+  background: #edf5ff;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ativelo-location-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ativelo-location-field {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ativelo-location-field > span {
+  color: #415066;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ativelo-location-field input,
+.ativelo-location-field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 13px;
+  border: 1px solid #dce3ed;
+  border-radius: 12px;
+  outline: none;
+  color: #15243a;
+  background: #fbfcfe;
+}
+
+.ativelo-location-field input:focus,
+.ativelo-location-field select:focus {
+  border-color: #4b91ef;
+  box-shadow: 0 0 0 4px rgba(23, 104, 219, 0.1);
+}
+
+.ativelo-location-row {
+  display: flex;
+  gap: 12px;
+}
+
+.ativelo-location-field.uf {
+  max-width: 100px;
+}
+
+.ativelo-location-form > button[type="submit"] {
+  min-height: 48px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 13px;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--ativelo-blue-600),
+    var(--ativelo-blue-500)
+  );
+  box-shadow: 0 12px 24px rgba(23, 104, 219, 0.2);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.ativelo-location-form > button:disabled {
+  opacity: 0.65;
+}
+
+.ativelo-location-feedback {
+  padding: 12px 13px;
+  border-radius: 11px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ativelo-location-feedback.error {
+  color: #a52e2e;
+  background: #fff0f0;
+}
+
+.ativelo-location-feedback.success {
+  color: #12704c;
+  background: #eafaf3;
+}
+
+.ativelo-location-records {
+  display: flex;
+  max-height: 600px;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.ativelo-location-records > div {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--ativelo-slate-200);
+  border-radius: 15px;
+  background: #fbfcfe;
+}
+
+.ativelo-location-records i {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--ativelo-blue-600);
+  background: var(--ativelo-blue-100);
+  font-style: normal;
+  font-weight: 900;
+}
+
+.ativelo-location-records > div > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-location-records strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-location-records small {
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--ativelo-slate-500);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-location-records b {
+  padding: 6px 8px;
+  border-radius: 9px;
+  color: #42618d;
+  background: #edf2f8;
+  font-size: 9px;
+}
+
+.ativelo-location-empty {
+  display: flex;
+  min-height: 360px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-direction: column;
+  padding: 25px;
+  border: 1px dashed var(--ativelo-slate-300);
+  border-radius: 17px;
+  color: var(--ativelo-slate-500);
+  text-align: center;
+}
+
+@media (max-width: 1180px) {
+  .ativelo-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ativelo-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-locations-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .ativelo-sidebar {
+    width: 225px;
+  }
+
+  .ativelo-dashboard-main {
+    margin-left: 225px;
+    padding: 26px 23px 45px;
+  }
+
+  .ativelo-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-hero-visual {
+    display: none;
+  }
+
+  .ativelo-quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-dashboard-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 700px) {
+  .ativelo-sidebar {
+    display: none;
+  }
+
+  .ativelo-dashboard-main {
+    margin-left: 0;
+    padding: 22px 16px 105px;
+  }
+
+  .ativelo-dashboard-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ativelo-dashboard-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .ativelo-topbar-secondary,
+  .ativelo-topbar-primary {
+    flex: 1;
+  }
+
+  .ativelo-hero {
+    min-height: auto;
+    border-radius: 23px;
+  }
+
+  .ativelo-hero > div:first-child {
+    padding: 31px 25px 34px;
+  }
+
+  .ativelo-hero h2 {
+    font-size: 32px;
+  }
+
+  .ativelo-hero-actions {
+    flex-direction: column;
+  }
+
+  .ativelo-hero-actions button {
+    width: 100%;
+  }
+
+  .ativelo-mobile-nav {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 30;
+    display: grid;
+    height: 76px;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+    padding: 7px 9px;
+    border-top: 1px solid var(--ativelo-slate-200);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 -10px 35px rgba(22, 41, 73, 0.09);
+  }
+
+  .ativelo-mobile-nav button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex-direction: column;
+    border: 0;
+    color: var(--ativelo-slate-500);
+    background: transparent;
+  }
+
+  .ativelo-mobile-nav button.active {
+    color: var(--ativelo-blue-600);
+  }
+
+  .ativelo-mobile-nav button.scan {
+    display: grid;
+    width: 54px;
+    height: 54px;
+    margin: -29px auto 0;
+    place-items: center;
+    border: 5px solid var(--ativelo-slate-100);
+    border-radius: 18px;
+    color: #fff;
+    background: linear-gradient(
+      145deg,
+      var(--ativelo-blue-600),
+      var(--ativelo-cyan-400)
+    );
+  }
+
+  .ativelo-locations-page {
+    padding: 23px 15px 45px;
+  }
+
+  .ativelo-locations-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ativelo-locations-header aside {
+    min-width: 0;
+  }
+
+  .ativelo-location-tabs {
+    grid-template-columns: repeat(7, 110px);
+  }
+
+  .ativelo-location-panel {
+    padding: 20px 16px;
+  }
+
+  .ativelo-location-row {
+    flex-direction: column;
+  }
+
+  .ativelo-location-field.uf {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ativelo-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-dashboard-actions {
+    display: grid;
+    grid-template-columns: 1fr 44px;
+  }
+
+  .ativelo-topbar-primary {
+    grid-column: 1 / -1;
+  }
+
+  .ativelo-locations-header h1 {
+    font-size: 38px;
+  }
+}

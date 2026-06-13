@@ -1,0 +1,13 @@
+{
+    "name":  "ativelo-platform",
+    "version":  "0.1.0",
+    "private":  true,
+    "description":  "Ativelo - Do patrimÃƒÂ´nio ao diagnÃƒÂ³stico.",
+    "packageManager":  "pnpm@11.6.0",
+    "scripts":  {
+                    "dev":  "pnpm -C apps/web dev",
+                    "build":  "pnpm -C apps/web build",
+                    "preview":  "pnpm -C apps/web preview",
+                    "typecheck":  "pnpm --filter @ativelo/web typecheck"
+                }
+}
