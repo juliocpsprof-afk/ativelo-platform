@@ -32,3 +32,5 @@ ativelo-auditoria.txt
 .wrangler/
 .dev.vars
 cloudflare/.dry-run/
+
+**/.dry-run/

@@ -10,5 +10,11 @@
   "vars": {
     "APP_ENV": "production",
     "ALLOWED_ORIGIN": "https://ativelo-platform.pages.dev"
+  },
+  "secrets": {
+    "required": [
+      "SUPABASE_URL",
+      "SUPABASE_PUBLISHABLE_KEY"
+    ]
   }
 }
