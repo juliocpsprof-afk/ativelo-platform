@@ -4,8 +4,11 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-06-14",
   "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
   "vars": {
-    "APP_ENV": "development",
-    "ALLOWED_ORIGIN": "http://localhost:5173"
+    "APP_ENV": "production",
+    "ALLOWED_ORIGIN": "https://ativelo-platform.pages.dev"
   }
 }
