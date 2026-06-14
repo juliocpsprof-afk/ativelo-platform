@@ -1,0 +1,297 @@
+/*
+  Camada de estabilizacao movel do Ativelo.
+  Este arquivo e carregado por ultimo para corrigir telas antigas sem
+  apagar os estilos originais de cada modulo.
+*/
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-width: 0;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+main[class^="ativelo-"],
+main[class*=" ativelo-"],
+section[class^="ativelo-"],
+section[class*=" ativelo-"] {
+  min-width: 0;
+}
+
+[class*="ativelo-"] {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 980px) {
+  .ativelo-dashboard-shell,
+  .ativelo-app-shell,
+  .ativelo-shell,
+  .ativelo-page-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .ativelo-sidebar,
+  .ativelo-dashboard-sidebar,
+  .ativelo-shell-sidebar {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .ativelo-sidebar nav,
+  .ativelo-dashboard-sidebar nav,
+  .ativelo-shell-sidebar nav,
+  .ativelo-dashboard-nav,
+  .ativelo-top-navigation {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 8px !important;
+    padding-bottom: 6px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .ativelo-sidebar nav button,
+  .ativelo-dashboard-sidebar nav button,
+  .ativelo-shell-sidebar nav button,
+  .ativelo-dashboard-nav button,
+  .ativelo-top-navigation button {
+    flex: 0 0 auto !important;
+    min-width: max-content !important;
+    scroll-snap-align: start;
+  }
+
+  .ativelo-dashboard-main,
+  .ativelo-shell-main,
+  .ativelo-page-main,
+  .ativelo-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  [class*="ativelo-"][class*="-header"],
+  [class*="ativelo-"][class*="-toolbar"],
+  [class*="ativelo-"][class*="-actions"],
+  [class*="ativelo-"][class*="-filters"] {
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+  }
+
+  [class*="ativelo-"][class*="-header"] > *,
+  [class*="ativelo-"][class*="-toolbar"] > *,
+  [class*="ativelo-"][class*="-actions"] > *,
+  [class*="ativelo-"][class*="-filters"] > * {
+    min-width: 0 !important;
+  }
+
+  .ativelo-modal,
+  [role="dialog"] {
+    width: min(94vw, 760px) !important;
+    max-width: 94vw !important;
+    max-height: calc(100dvh - 24px) !important;
+    margin: 12px !important;
+    overflow: auto !important;
+  }
+
+  .ativelo-modal-backdrop {
+    padding: 0 !important;
+    align-items: center !important;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --ativelo-mobile-page-padding: 14px;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  main[class^="ativelo-"],
+  main[class*=" ativelo-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: var(--ativelo-mobile-page-padding) !important;
+    padding-right: var(--ativelo-mobile-page-padding) !important;
+    overflow-x: clip !important;
+  }
+
+  [class*="ativelo-"][class*="-grid"],
+  [class*="ativelo-"][class*="-cards"],
+  [class*="ativelo-"][class*="-metrics"],
+  [class*="ativelo-"][class*="-summary"],
+  [class*="ativelo-"][class*="-columns"],
+  .two,
+  .three,
+  .four {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [class*="ativelo-"][class*="-card"],
+  [class*="ativelo-"][class*="-panel"],
+  [class*="ativelo-"][class*="-section"] {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  [class*="ativelo-"][class*="-actions"],
+  [class*="ativelo-"][class*="-toolbar"],
+  [class*="ativelo-"][class*="-filters"] {
+    display: flex !important;
+    width: 100% !important;
+    gap: 9px !important;
+  }
+
+  [class*="ativelo-"][class*="-actions"] > button,
+  [class*="ativelo-"][class*="-actions"] > a,
+  [class*="ativelo-"][class*="-actions"] > label,
+  [class*="ativelo-"][class*="-toolbar"] > button,
+  [class*="ativelo-"][class*="-toolbar"] > a,
+  [class*="ativelo-"][class*="-filters"] > button {
+    flex: 1 1 150px !important;
+    min-height: 44px !important;
+    white-space: normal !important;
+  }
+
+  form label,
+  form input,
+  form select,
+  form textarea {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  button,
+  a[role="button"] {
+    white-space: normal;
+  }
+
+  table {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  th,
+  td {
+    min-width: 120px;
+    white-space: normal !important;
+  }
+
+  .ativelo-users-directory,
+  .ativelo-invitations-list,
+  .ativelo-assets-list,
+  .ativelo-report-table,
+  .ativelo-table-wrap,
+  [class*="ativelo-"][class*="-table"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ativelo-email-preview {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 18px !important;
+  }
+
+  .ativelo-email-preview footer {
+    display: grid !important;
+    gap: 10px !important;
+  }
+
+  .ativelo-communication-actions {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  .ativelo-communication-actions button {
+    width: 100% !important;
+  }
+
+  .ativelo-user-card,
+  .ativelo-invitation-card,
+  .ativelo-asset-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  h1 {
+    font-size: clamp(1.55rem, 8vw, 2.15rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  h2 {
+    font-size: clamp(1.25rem, 6vw, 1.7rem) !important;
+  }
+
+  .ativelo-pwa-prompt {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: calc(74px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --ativelo-mobile-page-padding: 10px;
+  }
+
+  [class*="ativelo-"][class*="-actions"] > *,
+  [class*="ativelo-"][class*="-toolbar"] > *,
+  [class*="ativelo-"][class*="-filters"] > * {
+    flex-basis: 100% !important;
+    width: 100% !important;
+  }
+
+  .ativelo-modal,
+  [role="dialog"] {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    max-height: 100dvh !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .ativelo-worker-status {
+    top: max(6px, env(safe-area-inset-top)) !important;
+    right: 6px !important;
+    width: calc(100vw - 12px) !important;
+  }
+}

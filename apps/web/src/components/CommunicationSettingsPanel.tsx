@@ -267,7 +267,7 @@ export default function CommunicationSettingsPanel({
             <span>
               {integrationStatus.resend_configured
                 ? "Resend configurado no Supabase"
-                : "Aguardando RESEND_API_KEY e RESEND_FROM_EMAIL"}
+                : "Configuração pendente: adicione RESEND_API_KEY e RESEND_FROM_EMAIL nos Secrets do Supabase"}
             </span>
           </div>
           <b>
@@ -317,7 +317,7 @@ export default function CommunicationSettingsPanel({
             <span>
               {integrationStatus.app_base_url_configured
                 ? "APP_BASE_URL configurada"
-                : "Será usado o endereço enviado pelo navegador"}
+                : "Configure APP_BASE_URL com https://ativelo-platform.pages.dev"}
             </span>
           </div>
           <b>

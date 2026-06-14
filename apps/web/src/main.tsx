@@ -18,6 +18,7 @@ import "./ativelo-worker.css";
 import "./ativelo-pwa.css";
 import "./pwa/registerServiceWorker";
 
+import "./ativelo-mobile-stability.css";
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
