@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { BrowserMultiFormatReader } from "@zxing/browser";
-import { createWorker } from "tesseract.js";
-import * as XLSX from "xlsx";
 import type { OrganizationContext } from "../App";
 import AppIcon from "../components/AppIcon";
 import { supabase } from "../lib/supabase";
+import {
+  emptySmartLabelResult,
+  readSmartFactoryLabel,
+  type SmartLabelResult,
+} from "../lib/smartLabelVision";
 
 type Props = {
   organization: OrganizationContext;
@@ -25,20 +27,7 @@ type ModelOption = Option & {
   manufacturer_id: string | null;
 };
 
-type ParsedLabel = {
-  manufacturer: string;
-  model: string;
-  serialNumber: string;
-  serviceTag: string;
-  productNumber: string;
-  barcodeValue: string;
-  categoryHint: string;
-  processor: string;
-  memory: string;
-  storage: string;
-  operatingSystem: string;
-  rawText: string;
-};
+type ParsedLabel = SmartLabelResult;
 
 type CaptureForm = {
   assetNumber: string;
@@ -95,20 +84,7 @@ type ExistingAsset = {
   service_tag: string | null;
 };
 
-const emptyParsedLabel: ParsedLabel = {
-  manufacturer: "",
-  model: "",
-  serialNumber: "",
-  serviceTag: "",
-  productNumber: "",
-  barcodeValue: "",
-  categoryHint: "",
-  processor: "",
-  memory: "",
-  storage: "",
-  operatingSystem: "",
-  rawText: "",
-};
+const emptyParsedLabel: ParsedLabel = emptySmartLabelResult;
 
 const emptyCaptureForm: CaptureForm = {
   assetNumber: "",
@@ -262,145 +238,97 @@ function normalizeText(value: unknown) {
     .toLowerCase();
 }
 
-function cleanValue(value: string) {
-  return value
-    .replace(/^[\s:;#-]+/, "")
-    .replace(/[\s:;#-]+$/, "")
-    .trim();
-}
+function catalogDistance(left: string, right: string) {
+  if (left === right) return 0;
+  if (!left.length) return right.length;
+  if (!right.length) return left.length;
 
-function extractFirst(text: string, patterns: RegExp[]) {
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
+  const previous = Array.from(
+    { length: right.length + 1 },
+    (_, index) => index,
+  );
 
-    if (match?.[1]) {
-      return cleanValue(match[1]);
+  for (
+    let leftIndex = 1;
+    leftIndex <= left.length;
+    leftIndex += 1
+  ) {
+    const current = [leftIndex];
+
+    for (
+      let rightIndex = 1;
+      rightIndex <= right.length;
+      rightIndex += 1
+    ) {
+      current[rightIndex] = Math.min(
+        current[rightIndex - 1] + 1,
+        previous[rightIndex] + 1,
+        previous[rightIndex - 1] +
+          (
+            left[leftIndex - 1] === right[rightIndex - 1]
+              ? 0
+              : 1
+          ),
+      );
     }
+
+    previous.splice(0, previous.length, ...current);
   }
 
-  return "";
+  return previous[right.length];
 }
 
-function inferCategory(text: string) {
-  const normalized = normalizeText(text);
-
-  const rules = [
-    { value: "Notebook", words: ["notebook", "laptop", "latitude", "thinkpad", "ideapad"] },
-    { value: "Computador", words: ["desktop", "optiplex", "prodesk", "thinkcentre", "computer"] },
-    { value: "Monitor", words: ["monitor", "display", "lcd", "led monitor"] },
-    { value: "Impressora", words: ["printer", "impressora", "ecotank", "laserjet", "deskjet"] },
-    { value: "Servidor", words: ["server", "servidor", "poweredge", "proliant"] },
-    { value: "No-break", words: ["ups", "nobreak", "no-break", "uninterruptible"] },
-    { value: "Switch", words: ["switch", "catalyst", "managed switch"] },
-    { value: "Roteador", words: ["router", "roteador", "mikrotik"] },
-    { value: "Projetor", words: ["projector", "projetor"] },
-  ];
-
-  return rules.find((rule) =>
-    rule.words.some((word) => normalized.includes(normalizeText(word))),
-  )?.value ?? "";
-}
-
-function parseFactoryLabel(rawText: string, barcodeValue: string): ParsedLabel {
-  const compact = rawText.replace(/\r/g, "");
-  const normalized = normalizeText(compact);
-
-  const manufacturerNames = [
-    "Dell",
-    "HP",
-    "Hewlett Packard",
-    "Lenovo",
-    "Acer",
-    "Asus",
-    "Epson",
-    "Brother",
-    "Samsung",
-    "Canon",
-    "Intel",
-    "Cisco",
-    "Fortinet",
-    "Mikrotik",
-    "APC",
-    "SMS",
-    "Apple",
-    "LG",
-    "Positivo",
-  ];
-
-  const manufacturer =
-    manufacturerNames.find((name) =>
-      normalized.includes(normalizeText(name)),
-    ) ?? "";
-
-  const serviceTag = extractFirst(compact, [
-    /service\s*tag\s*[:#-]?\s*([A-Z0-9-]{4,30})/i,
-    /express\s*service\s*code\s*[:#-]?\s*([A-Z0-9-]{4,30})/i,
-  ]);
-
-  const serialNumber = extractFirst(compact, [
-    /serial\s*(?:number|no\.?|#)?\s*[:#-]?\s*([A-Z0-9._-]{4,50})/i,
-    /\bS\/N\s*[:#-]?\s*([A-Z0-9._-]{4,50})/i,
-    /\bSN\s*[:#-]?\s*([A-Z0-9._-]{4,50})/i,
-  ]);
-
-  const productNumber = extractFirst(compact, [
-    /product\s*(?:number|no\.?|#)\s*[:#-]?\s*([A-Z0-9._-]{3,60})/i,
-    /part\s*(?:number|no\.?|#)\s*[:#-]?\s*([A-Z0-9._-]{3,60})/i,
-    /\bP\/N\s*[:#-]?\s*([A-Z0-9._-]{3,60})/i,
-  ]);
-
-  const model = extractFirst(compact, [
-    /model\s*(?:name|number|no\.?|#)?\s*[:#-]?\s*([^\n]{3,80})/i,
-    /product\s*name\s*[:#-]?\s*([^\n]{3,80})/i,
-    /machine\s*type\s*model\s*[:#-]?\s*([^\n]{3,80})/i,
-  ]);
-
-  const processor = extractFirst(compact, [
-    /\b((?:Intel\s+)?Core\s+i[3579][-\s]?\d{4,5}[A-Z]{0,3})\b/i,
-    /\b((?:AMD\s+)?Ryzen\s+[3579]\s+\d{4,5}[A-Z]{0,3})\b/i,
-    /\b((?:Intel\s+)?Xeon\s+[A-Z0-9 -]{4,30})\b/i,
-  ]);
-
-  const memory = extractFirst(compact, [
-    /\b(\d{1,3}\s*GB\s*(?:DDR[345])?)\s*(?:RAM|MEMORY)?\b/i,
-  ]);
-
-  const storage = extractFirst(compact, [
-    /\b(\d{2,4}\s*(?:GB|TB)\s*(?:SSD|HDD|NVME))\b/i,
-    /\b((?:SSD|HDD|NVME)\s*\d{2,4}\s*(?:GB|TB))\b/i,
-  ]);
-
-  const operatingSystem = extractFirst(compact, [
-    /\b(Windows\s+(?:10|11)\s*(?:Home|Pro|Professional|Enterprise)?)\b/i,
-    /\b(Ubuntu\s+\d{2}\.\d{2})\b/i,
-  ]);
-
-  return {
-    manufacturer,
-    model: model.replace(/\s{2,}/g, " ").trim(),
-    serialNumber,
-    serviceTag,
-    productNumber,
-    barcodeValue,
-    categoryHint: inferCategory(compact),
-    processor,
-    memory,
-    storage,
-    operatingSystem,
-    rawText,
-  };
-}
-
-function findByName<T extends Option>(items: T[], value: string) {
+function findByName<T extends Option>(
+  items: T[],
+  value: string,
+) {
   const normalized = normalizeText(value);
 
   if (!normalized) return null;
 
+  const direct =
+    items.find(
+      (item) =>
+        normalizeText(item.name) === normalized,
+    ) ??
+    items.find((item) =>
+      normalized.includes(normalizeText(item.name)),
+    ) ??
+    items.find((item) =>
+      normalizeText(item.name).includes(normalized),
+    );
+
+  if (direct) {
+    return direct;
+  }
+
   return (
-    items.find((item) => normalizeText(item.name) === normalized) ??
-    items.find((item) => normalized.includes(normalizeText(item.name))) ??
-    items.find((item) => normalizeText(item.name).includes(normalized)) ??
-    null
+    items
+      .map((item) => {
+        const itemName = normalizeText(item.name);
+        const distance = catalogDistance(
+          itemName,
+          normalized,
+        );
+        const limit =
+          Math.max(itemName.length, normalized.length) >= 8
+            ? 2
+            : 1;
+
+        return {
+          item,
+          distance,
+          limit,
+        };
+      })
+      .filter(
+        (candidate) =>
+          candidate.distance <= candidate.limit,
+      )
+      .sort(
+        (left, right) =>
+          left.distance - right.distance,
+      )[0]?.item ?? null
   );
 }
 
@@ -588,27 +516,146 @@ export default function SmartCapturePage({
     }));
   };
 
-  const applyParsedLabel = (parsed: ParsedLabel) => {
-    const category = findByName(categories, parsed.categoryHint);
-    const manufacturer = findByName(
+  const applyParsedLabel = async (
+    parsed: ParsedLabel,
+  ) => {
+    const createdCatalogItems: string[] = [];
+
+    let category = findByName(
+      categories,
+      parsed.categoryHint,
+    );
+
+    if (
+      parsed.categoryHint &&
+      !category &&
+      window.confirm(
+        `A categoria "${parsed.categoryHint}" foi identificada, mas não existe no catálogo. Deseja cadastrá-la agora?`,
+      )
+    ) {
+      const { data, error } = await supabase
+        .from("asset_categories")
+        .insert({
+          organization_id: organization.organizationId,
+          name: parsed.categoryHint.trim(),
+          is_active: true,
+          description:
+            "Criada pela Captura Inteligente após confirmação.",
+        })
+        .select("id,name")
+        .single();
+
+      if (error) throw error;
+
+      category = data as Option;
+      setCategories((current) =>
+        [...current, category as Option].sort(
+          (left, right) =>
+            left.name.localeCompare(right.name),
+        ),
+      );
+      createdCatalogItems.push(
+        `categoria ${category.name}`,
+      );
+    }
+
+    let manufacturer = findByName(
       manufacturers,
       parsed.manufacturer,
     );
 
+    if (
+      parsed.manufacturer &&
+      !manufacturer &&
+      window.confirm(
+        `A marca "${parsed.manufacturer}" foi identificada, mas não existe no catálogo. Deseja cadastrá-la agora?`,
+      )
+    ) {
+      const { data, error } = await supabase
+        .from("manufacturers")
+        .insert({
+          organization_id: organization.organizationId,
+          name: parsed.manufacturer.trim(),
+          is_active: true,
+          notes:
+            "Criada pela Captura Inteligente após confirmação.",
+        })
+        .select("id,name")
+        .single();
+
+      if (error) throw error;
+
+      manufacturer = data as Option;
+      setManufacturers((current) =>
+        [...current, manufacturer as Option].sort(
+          (left, right) =>
+            left.name.localeCompare(right.name),
+        ),
+      );
+      createdCatalogItems.push(
+        `fabricante ${manufacturer.name}`,
+      );
+    }
+
     const compatibleModels = models.filter(
       (item) =>
-        (!category || item.category_id === category.id) &&
+        (!category ||
+          item.category_id === category.id) &&
         (!manufacturer ||
           !item.manufacturer_id ||
           item.manufacturer_id === manufacturer.id),
     );
 
-    const model = findByName(compatibleModels, parsed.model);
+    let model = findByName(
+      compatibleModels,
+      parsed.model,
+    );
+
+    if (
+      parsed.model &&
+      !model &&
+      category &&
+      window.confirm(
+        `O modelo "${parsed.model}" foi identificado, mas não existe no catálogo. Deseja cadastrá-lo agora?`,
+      )
+    ) {
+      const { data, error } = await supabase
+        .from("asset_models")
+        .insert({
+          organization_id: organization.organizationId,
+          category_id: category.id,
+          manufacturer_id: manufacturer?.id ?? null,
+          name: parsed.model.trim(),
+          model_number: parsed.model.trim(),
+          is_active: true,
+          description:
+            "Criado pela Captura Inteligente após confirmação.",
+        })
+        .select(
+          "id,name,category_id,manufacturer_id",
+        )
+        .single();
+
+      if (error) throw error;
+
+      model = data as ModelOption;
+      setModels((current) =>
+        [...current, model as ModelOption].sort(
+          (left, right) =>
+            left.name.localeCompare(right.name),
+        ),
+      );
+      createdCatalogItems.push(
+        `modelo ${model.name}`,
+      );
+    }
 
     const suggestedName = [
-      parsed.categoryHint || category?.name || "Equipamento",
-      parsed.manufacturer || manufacturer?.name,
-      parsed.model || model?.name,
+      category?.name ||
+        parsed.categoryHint ||
+        "Equipamento",
+      manufacturer?.name || parsed.manufacturer,
+      model?.name || parsed.model,
     ]
       .filter(Boolean)
       .join(" ");
@@ -616,33 +663,32 @@ export default function SmartCapturePage({
     setCaptureForm((current) => ({
       ...current,
       name: current.name || suggestedName,
-      categoryId: category?.id ?? current.categoryId,
+      categoryId:
+        category?.id ?? current.categoryId,
       manufacturerId:
         manufacturer?.id ?? current.manufacturerId,
       modelId: model?.id ?? current.modelId,
       serialNumber:
-        parsed.serialNumber || current.serialNumber,
-      serviceTag: parsed.serviceTag || current.serviceTag,
+        parsed.serialNumber ||
+        current.serialNumber,
+      serviceTag:
+        parsed.serviceTag || current.serviceTag,
       productNumber:
-        parsed.productNumber || current.productNumber,
+        parsed.productNumber ||
+        current.productNumber,
       barcodeValue:
-        parsed.barcodeValue || current.barcodeValue,
-      processor: parsed.processor || current.processor,
+        parsed.barcodeValue ||
+        current.barcodeValue,
+      processor:
+        parsed.processor || current.processor,
       memory: parsed.memory || current.memory,
       storage: parsed.storage || current.storage,
       operatingSystem:
-        parsed.operatingSystem || current.operatingSystem,
+        parsed.operatingSystem ||
+        current.operatingSystem,
     }));
-  };
 
-  const readBarcode = async (imageUrl: string) => {
-    try {
-      const reader = new BrowserMultiFormatReader();
-      const result = await reader.decodeFromImageUrl(imageUrl);
-      return result.getText();
-    } catch {
-      return "";
-    }
+    return createdCatalogItems;
   };
 
   const handleImageSelection = (
@@ -683,7 +729,8 @@ export default function SmartCapturePage({
     if (!selectedImage || !imagePreview) {
       setFeedback({
         type: "error",
-        text: "Fotografe ou selecione a etiqueta primeiro.",
+        text:
+          "Fotografe ou selecione a etiqueta primeiro.",
       });
       return;
     }
@@ -691,28 +738,44 @@ export default function SmartCapturePage({
     setIsReadingLabel(true);
     setFeedback(null);
 
-    let worker: Awaited<ReturnType<typeof createWorker>> | null =
-      null;
-
     try {
-      setOcrStage("Procurando código de barras...");
-      const barcodeValue = await readBarcode(imagePreview);
+      const parsed = await readSmartFactoryLabel(
+        selectedImage,
+        setOcrStage,
+      );
 
-      setOcrStage("Carregando mecanismo de leitura...");
-      worker = await createWorker("eng");
-
-      setOcrStage("Reconhecendo os textos da etiqueta...");
-      const recognition = await worker.recognize(imagePreview);
-      const rawText = recognition.data.text.trim();
-
-      const parsed = parseFactoryLabel(rawText, barcodeValue);
       setParsedLabel(parsed);
-      applyParsedLabel(parsed);
+
+      const createdCatalogItems =
+        await applyParsedLabel(parsed);
+
+      const confidenceText =
+        parsed.ocrConfidence > 0
+          ? ` Confiança média do OCR: ${parsed.ocrConfidence}%.`
+          : "";
+
+      const createdText =
+        createdCatalogItems.length > 0
+          ? ` Cadastrado agora: ${createdCatalogItems.join(", ")}.`
+          : "";
+
+      const warningText =
+        parsed.warnings.length > 0
+          ? ` Revise: ${parsed.warnings.join(" ")}`
+          : "";
 
       setFeedback({
-        type: "success",
+        type:
+          parsed.ocrConfidence > 0 &&
+          parsed.ocrConfidence < 55
+            ? "warning"
+            : "success",
         text:
-          "Leitura concluída. Revise os campos antes de criar o patrimônio.",
+          "Leitura concluída." +
+          confidenceText +
+          createdText +
+          warningText +
+          " Confirme os campos antes de criar o patrimônio.",
       });
     } catch (error) {
       setFeedback({
@@ -723,10 +786,6 @@ export default function SmartCapturePage({
             : "Não foi possível ler a etiqueta.",
       });
     } finally {
-      if (worker) {
-        await worker.terminate();
-      }
-
       setOcrStage("");
       setIsReadingLabel(false);
     }
@@ -896,6 +955,7 @@ export default function SmartCapturePage({
     setImportRows([]);
 
     try {
+      const XLSX = await import("xlsx");
       const buffer = await file.arrayBuffer();
       const workbook = XLSX.read(buffer, {
         type: "array",

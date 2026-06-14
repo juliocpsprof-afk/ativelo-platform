@@ -1,0 +1,195 @@
+.ativelo-vision-camera-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  z-index: 3;
+  width: min(90%, 420px);
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.76);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 750;
+  line-height: 1.3;
+  text-align: center;
+  transform: translateX(-50%);
+  backdrop-filter: blur(8px);
+}
+
+.ativelo-vision-camera-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  border-radius: 15px;
+  background: #f8fbff;
+}
+
+.ativelo-vision-camera-controls label {
+  display: grid;
+  min-width: min(240px, 100%);
+  flex: 1;
+  gap: 7px;
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.ativelo-vision-camera-controls input[type="range"] {
+  width: 100%;
+  accent-color: #1669c9;
+}
+
+.ativelo-vision-manual-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.ativelo-vision-manual-form label {
+  display: grid;
+  gap: 7px;
+}
+
+.ativelo-vision-manual-form label span {
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.ativelo-vision-manual-form input {
+  width: 100%;
+  min-height: 45px;
+  padding: 0 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-family:
+    "Courier New", ui-monospace, monospace;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.ativelo-vision-manual-form input:focus {
+  outline: 3px solid rgba(37, 99, 235, 0.14);
+  border-color: #2563eb;
+}
+
+.ativelo-vision-stage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 13px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 0.77rem;
+  font-weight: 800;
+}
+
+.ativelo-vision-stage span {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #2563eb;
+  animation: ativelo-vision-pulse 1.1s ease-in-out infinite;
+}
+
+.ativelo-label-info em {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 8px;
+  border: 1px dashed #2563eb;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 750;
+}
+
+.ativelo-label-info em b {
+  overflow-wrap: anywhere;
+  font-family:
+    "Courier New", ui-monospace, monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.ativelo-vision-qr-details {
+  display: grid;
+  gap: 7px;
+  padding: 13px;
+  border: 1px solid #dbeafe;
+  border-radius: 13px;
+  background: #f8fbff;
+}
+
+.ativelo-vision-qr-details > span {
+  color: #1e3a8a;
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.ativelo-vision-qr-details code {
+  overflow-wrap: anywhere;
+  color: #0f172a;
+  font-size: 0.78rem;
+}
+
+.ativelo-vision-qr-details p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+@keyframes ativelo-vision-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 720px) {
+  .ativelo-vision-manual-form {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-vision-manual-form button {
+    width: 100%;
+  }
+
+  .ativelo-vision-camera-controls {
+    align-items: stretch;
+  }
+
+  .ativelo-vision-camera-controls > * {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ativelo-vision-stage span {
+    animation: none;
+  }
+}

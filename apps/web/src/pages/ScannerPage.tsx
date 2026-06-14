@@ -1,7 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { BrowserQRCodeReader } from "@zxing/browser";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
+
 import type { OrganizationContext } from "../App";
 import AppIcon from "../components/AppIcon";
+import {
+  detectBarcodeFromSource,
+  readCodeWithFallback,
+  readVisibleAssetCode,
+} from "../lib/barcodeVision";
 import { supabase } from "../lib/supabase";
 import type { AssetRecord } from "../types/assets";
 import { statusLabels } from "../types/assets";
@@ -17,6 +28,128 @@ type ScannerControls = {
   stop: () => void;
 };
 
+type ExtendedCapabilities = MediaTrackCapabilities & {
+  torch?: boolean;
+  zoom?: {
+    min: number;
+    max: number;
+    step?: number;
+  };
+  focusMode?: string[];
+};
+
+type ParsedAssetCode = {
+  publicId: string | null;
+  token: string | null;
+  assetNumber: string | null;
+  barcodeValue: string | null;
+  serialNumber: string | null;
+  serviceTag: string | null;
+};
+
+function wait(milliseconds: number) {
+  return new Promise((resolve) =>
+    window.setTimeout(resolve, milliseconds),
+  );
+}
+
+function canvasToBlob(
+  canvas: HTMLCanvasElement,
+): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          resolve(blob);
+          return;
+        }
+
+        reject(
+          new Error(
+            "Não foi possível capturar a imagem da câmera.",
+          ),
+        );
+      },
+      "image/jpeg",
+      0.96,
+    );
+  });
+}
+
+function parseAssetCode(
+  rawCode: string,
+): ParsedAssetCode {
+  const normalized = rawCode.trim();
+
+  const compact = normalized.match(
+    /^ATV1\s*[:|]\s*(.+)$/i,
+  );
+
+  if (compact?.[1]) {
+    return {
+      publicId: null,
+      token: null,
+      assetNumber: compact[1].trim(),
+      barcodeValue: compact[1].trim(),
+      serialNumber: null,
+      serviceTag: null,
+    };
+  }
+
+  if (normalized.startsWith("ATV:")) {
+    const [, publicId, token] = normalized.split(":");
+
+    return {
+      publicId: publicId || null,
+      token: token || null,
+      assetNumber: null,
+      barcodeValue: null,
+      serialNumber: null,
+      serviceTag: null,
+    };
+  }
+
+  try {
+    const url = new URL(normalized);
+    const visibleCode =
+      url.searchParams.get("code") ??
+      url.searchParams.get("patrimonio");
+
+    return {
+      publicId: url.searchParams.get("asset"),
+      token: url.searchParams.get("token"),
+      assetNumber: visibleCode,
+      barcodeValue: visibleCode,
+      serialNumber: null,
+      serviceTag: null,
+    };
+  } catch {
+    if (
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        normalized,
+      )
+    ) {
+      return {
+        publicId: null,
+        token: normalized,
+        assetNumber: null,
+        barcodeValue: null,
+        serialNumber: null,
+        serviceTag: null,
+      };
+    }
+
+    return {
+      publicId: null,
+      token: null,
+      assetNumber: normalized,
+      barcodeValue: normalized,
+      serialNumber: normalized,
+      serviceTag: normalized,
+    };
+  }
+}
+
 export default function ScannerPage({
   organization,
   onBack,
@@ -26,16 +159,43 @@ export default function ScannerPage({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const controlsRef = useRef<ScannerControls | null>(null);
   const handledCodeRef = useRef<string | null>(null);
+  const nativeLoopActiveRef = useRef(false);
 
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [isResolving, setIsResolving] = useState(false);
-  const [resultAsset, setResultAsset] = useState<AssetRecord | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [isCameraActive, setIsCameraActive] =
+    useState(false);
+  const [isResolving, setIsResolving] =
+    useState(false);
+  const [resultAsset, setResultAsset] =
+    useState<AssetRecord | null>(null);
+  const [message, setMessage] =
+    useState<string | null>(null);
+  const [manualCode, setManualCode] = useState("");
+  const [stage, setStage] = useState("");
+  const [torchSupported, setTorchSupported] =
+    useState(false);
+  const [torchEnabled, setTorchEnabled] =
+    useState(false);
+  const [zoomSupported, setZoomSupported] =
+    useState(false);
+  const [zoomMin, setZoomMin] = useState(1);
+  const [zoomMax, setZoomMax] = useState(1);
+  const [zoomStep, setZoomStep] = useState(0.1);
+  const [zoomValue, setZoomValue] = useState(1);
+
+  const getVideoTrack = useCallback(() => {
+    const stream = videoRef.current?.srcObject;
+
+    if (!(stream instanceof MediaStream)) {
+      return null;
+    }
+
+    return stream.getVideoTracks()[0] ?? null;
+  }, []);
 
   const stopCamera = useCallback(() => {
+    nativeLoopActiveRef.current = false;
     controlsRef.current?.stop();
     controlsRef.current = null;
-    setIsCameraActive(false);
 
     const stream = videoRef.current?.srcObject;
 
@@ -46,15 +206,99 @@ export default function ScannerPage({
     if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
+
+    setIsCameraActive(false);
+    setTorchSupported(false);
+    setTorchEnabled(false);
+    setZoomSupported(false);
   }, []);
 
   useEffect(() => stopCamera, [stopCamera]);
+
+  const findAsset = useCallback(
+    async (
+      parsed: ParsedAssetCode,
+    ): Promise<AssetRecord | null> => {
+      const candidates: Array<{
+        field:
+          | "public_id"
+          | "qr_token"
+          | "asset_number"
+          | "barcode_value"
+          | "serial_number"
+          | "service_tag";
+        value: string | null;
+      }> = [
+        { field: "public_id", value: parsed.publicId },
+        { field: "qr_token", value: parsed.token },
+        {
+          field: "asset_number",
+          value: parsed.assetNumber,
+        },
+        {
+          field: "barcode_value",
+          value: parsed.barcodeValue,
+        },
+        {
+          field: "serial_number",
+          value: parsed.serialNumber,
+        },
+        {
+          field: "service_tag",
+          value: parsed.serviceTag,
+        },
+      ];
+
+      const attempted = new Set<string>();
+
+      for (const candidate of candidates) {
+        const value = candidate.value?.trim();
+
+        if (!value) {
+          continue;
+        }
+
+        const key = `${candidate.field}:${value.toLowerCase()}`;
+
+        if (attempted.has(key)) {
+          continue;
+        }
+
+        attempted.add(key);
+
+        const { data, error } = await supabase
+          .from("assets")
+          .select("*")
+          .eq(
+            "organization_id",
+            organization.organizationId,
+          )
+          .eq(candidate.field, value)
+          .limit(1)
+          .maybeSingle();
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          return data as AssetRecord;
+        }
+      }
+
+      return null;
+    },
+    [organization.organizationId],
+  );
 
   const resolveCode = useCallback(
     async (rawCode: string) => {
       const normalizedCode = rawCode.trim();
 
-      if (!normalizedCode || handledCodeRef.current === normalizedCode) {
+      if (
+        !normalizedCode ||
+        handledCodeRef.current === normalizedCode
+      ) {
         return;
       }
 
@@ -62,43 +306,24 @@ export default function ScannerPage({
       setIsResolving(true);
       setMessage(null);
       setResultAsset(null);
+      setStage("Localizando o equipamento...");
 
       try {
-        const parsed = parseAssetCode(normalizedCode);
+        const asset = await findAsset(
+          parseAssetCode(normalizedCode),
+        );
 
-        if (!parsed.publicId && !parsed.token) {
+        if (!asset) {
           throw new Error(
-            "O código lido não pertence a uma etiqueta do Ativelo.",
+            "O código foi lido, mas nenhum equipamento correspondente foi encontrado nesta empresa.",
           );
         }
 
-        let query = supabase
-          .from("assets")
-          .select("*")
-          .eq("organization_id", organization.organizationId);
-
-        if (parsed.publicId) {
-          query = query.eq("public_id", parsed.publicId);
-        }
-
-        if (parsed.token) {
-          query = query.eq("qr_token", parsed.token);
-        }
-
-        const { data, error } = await query.limit(1).maybeSingle();
-
-        if (error) {
-          throw error;
-        }
-
-        if (!data) {
-          throw new Error(
-            "O equipamento não foi encontrado nesta empresa.",
-          );
-        }
-
-        setResultAsset(data as AssetRecord);
-        setMessage("Equipamento identificado com sucesso.");
+        setResultAsset(asset);
+        setManualCode(asset.asset_number);
+        setMessage(
+          "Equipamento identificado com sucesso.",
+        );
         stopCamera();
       } catch (error) {
         setMessage(
@@ -108,10 +333,11 @@ export default function ScannerPage({
         );
         handledCodeRef.current = null;
       } finally {
+        setStage("");
         setIsResolving(false);
       }
     },
-    [organization.organizationId, stopCamera],
+    [findAsset, stopCamera],
   );
 
   useEffect(() => {
@@ -120,46 +346,256 @@ export default function ScannerPage({
     }
   }, [initialCode, resolveCode]);
 
+  const configureCameraTrack = useCallback(async () => {
+    await wait(350);
+
+    const track = getVideoTrack();
+
+    if (!track) {
+      return;
+    }
+
+    const capabilities =
+      track.getCapabilities() as ExtendedCapabilities;
+
+    const advanced: Array<Record<string, unknown>> = [];
+
+    if (
+      capabilities.focusMode?.includes("continuous")
+    ) {
+      advanced.push({
+        focusMode: "continuous",
+      });
+    }
+
+    if (advanced.length > 0) {
+      try {
+        await track.applyConstraints({
+          advanced:
+            advanced as unknown as MediaTrackConstraintSet[],
+        });
+      } catch {
+        // Alguns navegadores anunciam o recurso, mas rejeitam a aplicação.
+      }
+    }
+
+    if (capabilities.torch) {
+      setTorchSupported(true);
+    }
+
+    if (capabilities.zoom) {
+      const minimum = Number(capabilities.zoom.min) || 1;
+      const maximum = Number(capabilities.zoom.max) || minimum;
+      const step = Number(capabilities.zoom.step) || 0.1;
+
+      setZoomSupported(maximum > minimum);
+      setZoomMin(minimum);
+      setZoomMax(maximum);
+      setZoomStep(step);
+      setZoomValue(minimum);
+    }
+  }, [getVideoTrack]);
+
+  const startNativeDetectionLoop =
+    useCallback(async () => {
+      nativeLoopActiveRef.current = true;
+
+      while (
+        nativeLoopActiveRef.current &&
+        videoRef.current
+      ) {
+        const video = videoRef.current;
+
+        if (video.readyState >= 2) {
+          const value =
+            await detectBarcodeFromSource(video);
+
+          if (value) {
+            await resolveCode(value);
+            return;
+          }
+        }
+
+        await wait(320);
+      }
+    }, [resolveCode]);
+
   const startCamera = async () => {
     setMessage(null);
     setResultAsset(null);
+    setStage("Abrindo a câmera traseira...");
     handledCodeRef.current = null;
     stopCamera();
 
     if (!videoRef.current) {
-      setMessage("O leitor de câmera ainda não está pronto.");
+      setMessage(
+        "O leitor de câmera ainda não está pronto.",
+      );
+      setStage("");
       return;
     }
 
     try {
-      const codeReader = new BrowserQRCodeReader();
+      const { BrowserMultiFormatReader } =
+        await import("@zxing/browser");
 
-      const controls = await codeReader.decodeFromConstraints(
-        {
-          audio: false,
-          video: {
-            facingMode: { ideal: "environment" },
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+      const reader = new BrowserMultiFormatReader();
+
+      const controls =
+        await reader.decodeFromConstraints(
+          {
+            audio: false,
+            video: {
+              facingMode: {
+                ideal: "environment",
+              },
+              width: {
+                ideal: 1920,
+                min: 1280,
+              },
+              height: {
+                ideal: 1080,
+                min: 720,
+              },
+              frameRate: {
+                ideal: 30,
+              },
+            },
           },
-        },
-        videoRef.current,
-        (result) => {
-          if (result) {
-            void resolveCode(result.getText());
-          }
-        },
-      );
+          videoRef.current,
+          (result) => {
+            if (result) {
+              void resolveCode(result.getText());
+            }
+          },
+        );
 
       controlsRef.current = controls;
       setIsCameraActive(true);
+      setStage(
+        "Aponte para o QR Code ou código de barras.",
+      );
+
+      await configureCameraTrack();
+      void startNativeDetectionLoop();
     } catch (error) {
       setMessage(
         error instanceof Error
           ? `Não foi possível acessar a câmera: ${error.message}`
           : "Não foi possível acessar a câmera.",
       );
+      setStage("");
       stopCamera();
+    }
+  };
+
+  const setTorch = async () => {
+    const track = getVideoTrack();
+
+    if (!track) {
+      return;
+    }
+
+    const nextValue = !torchEnabled;
+
+    try {
+      await track.applyConstraints({
+        advanced: [
+          {
+            torch: nextValue,
+          } as unknown as MediaTrackConstraintSet,
+        ],
+      });
+      setTorchEnabled(nextValue);
+    } catch {
+      setMessage(
+        "A lanterna foi anunciada pelo aparelho, mas o navegador não permitiu ativá-la.",
+      );
+    }
+  };
+
+  const setZoom = async (value: number) => {
+    setZoomValue(value);
+
+    const track = getVideoTrack();
+
+    if (!track) {
+      return;
+    }
+
+    try {
+      await track.applyConstraints({
+        advanced: [
+          {
+            zoom: value,
+          } as unknown as MediaTrackConstraintSet,
+        ],
+      });
+    } catch {
+      setMessage(
+        "Não foi possível aplicar o zoom nesta câmera.",
+      );
+    }
+  };
+
+  const captureCurrentFrame = async (): Promise<Blob> => {
+    const video = videoRef.current;
+
+    if (
+      !video ||
+      video.videoWidth <= 0 ||
+      video.videoHeight <= 0
+    ) {
+      throw new Error(
+        "A câmera ainda não gerou uma imagem válida.",
+      );
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      throw new Error(
+        "Não foi possível preparar a captura.",
+      );
+    }
+
+    context.drawImage(video, 0, 0);
+    return canvasToBlob(canvas);
+  };
+
+  const readWrittenCodeFromCamera = async () => {
+    setIsResolving(true);
+    setMessage(null);
+    handledCodeRef.current = null;
+
+    try {
+      const frame = await captureCurrentFrame();
+      const code = await readVisibleAssetCode(
+        frame,
+        setStage,
+      );
+
+      if (!code) {
+        throw new Error(
+          "O texto da etiqueta não ficou legível. Aproxime a câmera, evite reflexos ou digite o código.",
+        );
+      }
+
+      setManualCode(code);
+      await resolveCode(code);
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível ler o código escrito.",
+      );
+    } finally {
+      setStage("");
+      setIsResolving(false);
     }
   };
 
@@ -173,65 +609,100 @@ export default function ScannerPage({
     handledCodeRef.current = null;
     setIsResolving(true);
 
-    const objectUrl = URL.createObjectURL(file);
-
     try {
-      const codeReader = new BrowserQRCodeReader();
-      const result = await codeReader.decodeFromImageUrl(objectUrl);
-      await resolveCode(result.getText());
+      const code = await readCodeWithFallback(
+        file,
+        setStage,
+      );
+
+      if (!code) {
+        throw new Error(
+          "Nenhum QR Code, código de barras ou código alfanumérico legível foi encontrado.",
+        );
+      }
+
+      setManualCode(code);
+      await resolveCode(code);
     } catch (error) {
       setMessage(
         error instanceof Error
-          ? `Não foi possível ler a imagem: ${error.message}`
-          : "Não foi possível ler o QR Code da imagem.",
+          ? error.message
+          : "Não foi possível ler a imagem.",
       );
       handledCodeRef.current = null;
     } finally {
-      URL.revokeObjectURL(objectUrl);
+      setStage("");
       setIsResolving(false);
     }
+  };
+
+  const submitManualCode = (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    handledCodeRef.current = null;
+    void resolveCode(manualCode);
   };
 
   return (
     <main className="ativelo-scanner-page">
       <header className="ativelo-scanner-header">
         <div>
-          <button type="button" onClick={onBack}>
+          <button
+            type="button"
+            className="ativelo-back-link"
+            onClick={onBack}
+          >
             ← Voltar ao painel
           </button>
-          <p>IDENTIFICAÇÃO INSTANTÂNEA</p>
-          <h1>Leitor de QR Code</h1>
-          <span>
-            Use a câmera do celular ou envie uma imagem para localizar o
-            equipamento.
-          </span>
-        </div>
 
-        <img src="/assets/ativelo-logo.png" alt="Ativelo" />
+          <span>IDENTIFICAÇÃO MULTICAMADA</span>
+          <h1>Leitor de etiquetas</h1>
+          <p>
+            Leia QR Code, código de barras ou o código
+            alfanumérico impresso na etiqueta.
+          </p>
+        </div>
       </header>
 
-      <section className="ativelo-scanner-layout">
+      <section className="ativelo-scanner-grid">
         <article className="ativelo-scanner-card">
           <div className="ativelo-scanner-video">
-            <video ref={videoRef} muted playsInline />
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+            />
 
             {!isCameraActive && (
               <div className="ativelo-scanner-placeholder">
                 <AppIcon name="scan" size={50} />
                 <strong>Câmera desativada</strong>
                 <span>
-                  Toque no botão abaixo para autorizar o acesso à câmera.
+                  Ative a câmera traseira ou envie uma
+                  imagem.
                 </span>
               </div>
             )}
 
             {isCameraActive && (
-              <div className="ativelo-scanner-frame" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
+              <>
+                <div
+                  className="ativelo-scanner-frame"
+                  aria-hidden="true"
+                >
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </div>
+
+                <span className="ativelo-vision-camera-hint">
+                  Centralize o código e mantenha o celular
+                  firme.
+                </span>
+              </>
             )}
           </div>
 
@@ -243,7 +714,9 @@ export default function ScannerPage({
               disabled={isResolving}
             >
               <AppIcon name="camera" size={19} />
-              {isCameraActive ? "Reiniciar câmera" : "Ativar câmera"}
+              {isCameraActive
+                ? "Reiniciar câmera"
+                : "Ativar câmera"}
             </button>
 
             {isCameraActive && (
@@ -262,41 +735,120 @@ export default function ScannerPage({
               <input
                 type="file"
                 accept="image/*"
+                capture="environment"
                 hidden
                 onChange={(event) =>
-                  void scanImage(event.target.files?.[0])
+                  void scanImage(
+                    event.target.files?.[0],
+                  )
                 }
               />
             </label>
           </div>
 
-          <p className="ativelo-camera-note">
-            Em celulares, dê preferência à câmera traseira. O navegador
-            solicitará sua autorização antes de iniciar.
+          {isCameraActive && (
+            <div className="ativelo-vision-camera-controls">
+              {torchSupported && (
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => void setTorch()}
+                >
+                  {torchEnabled
+                    ? "Desligar lanterna"
+                    : "Ligar lanterna"}
+                </button>
+              )}
+
+              {zoomSupported && (
+                <label>
+                  <span>Zoom {zoomValue.toFixed(1)}×</span>
+                  <input
+                    type="range"
+                    min={zoomMin}
+                    max={zoomMax}
+                    step={zoomStep}
+                    value={zoomValue}
+                    onChange={(event) =>
+                      void setZoom(
+                        Number(event.target.value),
+                      )
+                    }
+                  />
+                </label>
+              )}
+
+              <button
+                type="button"
+                className="secondary"
+                disabled={isResolving}
+                onClick={() =>
+                  void readWrittenCodeFromCamera()
+                }
+              >
+                Ler código escrito
+              </button>
+            </div>
+          )}
+
+          <p className="ativelo-scanner-note">
+            Se o QR Code estiver riscado, apagado ou com
+            reflexo, use “Ler código escrito” ou digite o
+            patrimônio abaixo.
           </p>
+
+          <form
+            className="ativelo-vision-manual-form"
+            onSubmit={submitManualCode}
+          >
+            <label>
+              <span>Código da etiqueta</span>
+              <input
+                value={manualCode}
+                onChange={(event) =>
+                  setManualCode(event.target.value)
+                }
+                placeholder="Ex.: NOTE-00015, serial ou service tag"
+                autoCapitalize="characters"
+                autoComplete="off"
+              />
+            </label>
+
+            <button
+              type="submit"
+              className="primary"
+              disabled={
+                isResolving || !manualCode.trim()
+              }
+            >
+              Localizar equipamento
+            </button>
+          </form>
+
+          {stage && (
+            <div className="ativelo-vision-stage">
+              <span />
+              {stage}
+            </div>
+          )}
         </article>
 
-        <article className="ativelo-scanner-result-card">
-          <div className="ativelo-detail-section-heading">
-            <div>
-              <span>RESULTADO</span>
-              <h2>Equipamento identificado</h2>
-            </div>
-          </div>
+        <article className="ativelo-scanner-result">
+          <span>RESULTADO</span>
+          <h2>Equipamento identificado</h2>
 
           {isResolving ? (
-            <div className="ativelo-inline-empty">
-              <AppIcon name="scan" size={34} />
-              <strong>Analisando o código...</strong>
+            <div className="ativelo-scanner-empty">
+              <AppIcon name="scan" size={38} />
+              <strong>Analisando a etiqueta...</strong>
+              <span>{stage || "Aguarde."}</span>
             </div>
           ) : resultAsset ? (
-            <div className="ativelo-scan-result">
-              <div className="ativelo-scan-result-icon">
-                <AppIcon name="assets" size={32} />
-              </div>
-
-              <span className={`status ${resultAsset.operational_status}`}>
-                {statusLabels[resultAsset.operational_status] ??
+            <div className="ativelo-scanner-asset">
+              <span className="status">
+                {statusLabels[
+                  resultAsset.operational_status
+                ] ??
                   resultAsset.operational_status}
               </span>
 
@@ -306,16 +858,23 @@ export default function ScannerPage({
               <dl>
                 <div>
                   <dt>Serial</dt>
-                  <dd>{resultAsset.serial_number || "Não informado"}</dd>
+                  <dd>
+                    {resultAsset.serial_number ||
+                      "Não informado"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Hostname</dt>
-                  <dd>{resultAsset.hostname || "Não informado"}</dd>
+                  <dd>
+                    {resultAsset.hostname ||
+                      "Não informado"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Responsável</dt>
                   <dd>
-                    {resultAsset.assigned_person_name || "Não atribuído"}
+                    {resultAsset.assigned_person_name ||
+                      "Não atribuído"}
                   </dd>
                 </div>
               </dl>
@@ -323,68 +882,32 @@ export default function ScannerPage({
               <button
                 type="button"
                 className="primary"
-                onClick={() => onOpenAsset(resultAsset.id)}
+                onClick={() =>
+                  onOpenAsset(resultAsset.id)
+                }
               >
                 Abrir ficha completa
-                <AppIcon name="chevron" size={18} />
               </button>
             </div>
           ) : (
-            <div className="ativelo-inline-empty">
-              <AppIcon name="tag" size={34} />
+            <div className="ativelo-scanner-empty">
+              <AppIcon name="scan" size={38} />
               <strong>Aguardando leitura</strong>
               <span>
-                O equipamento aparecerá aqui assim que o QR Code for
-                reconhecido.
+                O equipamento aparecerá aqui quando qualquer
+                camada de identificação reconhecer a
+                etiqueta.
               </span>
             </div>
           )}
 
           {message && (
-            <div
-              className={`ativelo-assets-feedback ${
-                resultAsset ? "success" : "error"
-              }`}
-            >
+            <div className="ativelo-scanner-message">
               {message}
             </div>
           )}
         </article>
       </section>
     </main>
-  );
-}
-
-function parseAssetCode(rawCode: string): {
-  publicId: string | null;
-  token: string | null;
-} {
-  if (rawCode.startsWith("ATV:")) {
-    const [, publicId, token] = rawCode.split(":");
-
-    return {
-      publicId: publicId || null,
-      token: token || null,
-    };
-  }
-
-  try {
-    const url = new URL(rawCode);
-
-    return {
-      publicId: url.searchParams.get("asset"),
-      token: url.searchParams.get("token"),
-    };
-  } catch {
-    return {
-      publicId: null,
-      token: isUuid(rawCode) ? rawCode : null,
-    };
-  }
-}
-
-function isUuid(value: string): boolean {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    value,
   );
 }

@@ -10,6 +10,7 @@ import "./ativelo-support.css";
 import "./ativelo-logistics.css";
 import "./ativelo-network.css";
 import "./ativelo-capture.css";
+import "./ativelo-vision.css";
 import "./ativelo-audit-reports.css";
 import "./ativelo-settings.css";
 import "./ativelo-users.css";
