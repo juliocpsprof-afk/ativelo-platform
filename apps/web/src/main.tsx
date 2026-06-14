@@ -14,6 +14,8 @@ import "./ativelo-audit-reports.css";
 import "./ativelo-settings.css";
 import "./ativelo-users.css";
 import "./ativelo-worker.css";
+import "./ativelo-pwa.css";
+import "./pwa/registerServiceWorker";
 
 const rootElement = document.getElementById("root");
 

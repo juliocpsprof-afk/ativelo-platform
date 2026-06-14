@@ -1,0 +1,106 @@
+.ativelo-pwa-prompt {
+  position: fixed;
+  left: max(18px, env(safe-area-inset-left));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 1210;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  width: min(470px, calc(100vw - 36px));
+  padding: 13px 14px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 20px 55px rgba(15, 23, 42, 0.17),
+    0 3px 9px rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  backdrop-filter: blur(18px);
+}
+
+.ativelo-pwa-prompt img {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  box-shadow: 0 5px 14px rgba(18, 60, 122, 0.2);
+}
+
+.ativelo-pwa-prompt__content {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.ativelo-pwa-prompt__content strong {
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+
+.ativelo-pwa-prompt__content span {
+  color: #475569;
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.ativelo-pwa-prompt button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.ativelo-pwa-prompt__primary {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 11px;
+  background: #123c7a;
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.ativelo-pwa-prompt__primary:hover {
+  background: #0d5db0;
+}
+
+.ativelo-pwa-prompt__close {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #64748b;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.ativelo-pwa-prompt__close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.ativelo-pwa-prompt--update {
+  border-color: rgba(22, 163, 74, 0.25);
+}
+
+@media (max-width: 720px) {
+  .ativelo-pwa-prompt {
+    left: 12px;
+    bottom: calc(155px + env(safe-area-inset-bottom));
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    width: calc(100vw - 24px);
+  }
+
+  .ativelo-pwa-prompt__primary {
+    grid-column: 2 / 4;
+    width: 100%;
+  }
+
+  .ativelo-pwa-prompt__close {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}

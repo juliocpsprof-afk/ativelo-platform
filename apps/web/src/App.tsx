@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { WorkerSessionProvider } from "./contexts/WorkerSessionContext";
 import WorkerSessionStatus from "./components/WorkerSessionStatus";
+import PwaInstallPrompt from "./components/PwaInstallPrompt";
 import { supabase, supabaseConfigurationError } from "./lib/supabase";
 import AuditReportsPage from "./pages/AuditReportsPage";
 import type { AuditReportsTab } from "./pages/AuditReportsPage";
@@ -344,6 +345,7 @@ export default function App() {
     <AuthProvider>
       <WorkerSessionProvider>
         <WorkerSessionStatus />
+        <PwaInstallPrompt />
         <AppContent />
       </WorkerSessionProvider>
     </AuthProvider>
