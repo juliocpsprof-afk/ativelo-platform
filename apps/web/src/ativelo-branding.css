@@ -1,0 +1,189 @@
+.ativelo-official-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 4px 25px;
+  padding: 14px 15px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 15px 35px rgba(0, 13, 39, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.ativelo-official-brand-image {
+  display: block;
+  width: 100%;
+  max-width: 205px;
+  height: auto;
+  object-fit: contain;
+}
+
+.ativelo-official-brand > span {
+  color: #55708f;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15px;
+  text-align: center;
+}
+
+.ativelo-page-heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.ativelo-topbar-brand {
+  display: block;
+  width: 145px;
+  height: auto;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f1;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(20, 45, 85, 0.06);
+  object-fit: contain;
+}
+
+.ativelo-sidebar-nav {
+  gap: 8px;
+}
+
+.ativelo-sidebar-nav button {
+  min-height: 52px;
+  gap: 14px;
+  padding: 10px 13px;
+  border-radius: 15px;
+  font-size: 14px;
+  transition:
+    transform 150ms ease,
+    color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.ativelo-sidebar-nav button:hover {
+  transform: translateX(3px);
+}
+
+.ativelo-sidebar-nav button.active {
+  background: linear-gradient(
+    90deg,
+    rgba(51, 132, 255, 0.28),
+    rgba(39, 212, 218, 0.13)
+  );
+  box-shadow:
+    inset 3px 0 0 #27d4da,
+    0 8px 20px rgba(0, 12, 38, 0.16);
+}
+
+.ativelo-sidebar-nav button strong {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.ativelo-menu-icon {
+  display: grid !important;
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.07);
+  transition:
+    color 150ms ease,
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.ativelo-sidebar-nav button:hover .ativelo-menu-icon,
+.ativelo-sidebar-nav button.active .ativelo-menu-icon {
+  border-color: rgba(39, 212, 218, 0.34);
+  color: #ffffff;
+  background: rgba(39, 212, 218, 0.16);
+}
+
+.ativelo-dashboard-actions button svg,
+.ativelo-hero-actions button svg {
+  flex: 0 0 auto;
+}
+
+.ativelo-hero-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.ativelo-device {
+  color: #ffffff;
+}
+
+.ativelo-quick-grid i svg,
+.ativelo-empty i svg {
+  display: block;
+}
+
+.ativelo-quick-grid b {
+  display: grid;
+  place-items: center;
+}
+
+.ativelo-mobile-nav button > svg {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1180px) {
+  .ativelo-topbar-brand {
+    display: none;
+  }
+
+  .ativelo-page-heading {
+    gap: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .ativelo-official-brand {
+    padding-inline: 10px;
+  }
+
+  .ativelo-official-brand-image {
+    max-width: 165px;
+  }
+}
+
+@media (max-width: 700px) {
+  .ativelo-dashboard-topbar {
+    gap: 18px;
+  }
+
+  .ativelo-dashboard-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 44px;
+    gap: 9px;
+  }
+
+  .ativelo-topbar-primary {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 440px) {
+  .ativelo-dashboard-actions {
+    grid-template-columns: 1fr 44px;
+  }
+
+  .ativelo-dashboard-actions .ativelo-topbar-secondary:first-child {
+    display: none;
+  }
+
+  .ativelo-dashboard-actions .ativelo-topbar-secondary:nth-child(2) {
+    min-width: 0;
+  }
+}

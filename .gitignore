@@ -26,3 +26,5 @@ backup-*
 repair-encoding-temp.cjs
 .idea/
 .vscode/*.local
+backup-package-*/
+**/backup-package-*/

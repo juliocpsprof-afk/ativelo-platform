@@ -1,4 +1,6 @@
-﻿packages:
+packages:
   - "apps/*"
   - "services/*"
   - "packages/*"
+allowBuilds:
+  tesseract.js: true

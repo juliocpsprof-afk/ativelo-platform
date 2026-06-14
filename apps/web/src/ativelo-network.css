@@ -1,0 +1,834 @@
+.ativelo-network-page {
+  min-height: 100vh;
+  padding: 34px clamp(16px, 4vw, 54px) 70px;
+  color: #142033;
+  background:
+    radial-gradient(circle at 95% 5%, rgba(25, 113, 245, 0.08), transparent 28%),
+    #f4f7fb;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.ativelo-network-page * { box-sizing: border-box; }
+
+.ativelo-network-page button,
+.ativelo-network-page input,
+.ativelo-network-page select,
+.ativelo-network-page textarea { font: inherit; }
+
+.ativelo-network-header {
+  display: flex;
+  max-width: 1500px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 auto 24px;
+}
+
+.ativelo-network-header > div:first-child > button {
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+  color: #1971f5;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.ativelo-network-header p {
+  margin: 0 0 6px;
+  color: #1971f5;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+
+.ativelo-network-header h1 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 52px);
+  letter-spacing: -1.8px;
+}
+
+.ativelo-network-header > div:first-child > span {
+  display: block;
+  max-width: 780px;
+  margin-top: 8px;
+  color: #748197;
+  line-height: 1.55;
+}
+
+.ativelo-network-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ativelo-network-header-actions button,
+.ativelo-token-form > button,
+.ativelo-command-list button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border-radius: 13px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.ativelo-network-metrics {
+  display: grid;
+  max-width: 1500px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 auto 18px;
+}
+
+.ativelo-network-metrics article {
+  padding: 17px 18px;
+  border: 1px solid #e0e6ef;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(24, 42, 74, 0.05);
+}
+
+.ativelo-network-metrics article.warning {
+  border-color: #eed49d;
+  background: #fffaf0;
+}
+
+.ativelo-network-metrics span {
+  color: #748197;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ativelo-network-metrics strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 28px;
+}
+
+.ativelo-network-tabs {
+  display: flex;
+  max-width: 1500px;
+  gap: 9px;
+  margin: 0 auto 18px;
+  overflow-x: auto;
+}
+
+.ativelo-network-tabs button {
+  display: inline-flex;
+  min-width: 150px;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 15px;
+  border: 1px solid #dfe6ef;
+  border-radius: 14px;
+  color: #58677c;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.ativelo-network-tabs button.active {
+  border-color: #77aefa;
+  color: #155fc7;
+  background: #eaf3ff;
+}
+
+.ativelo-network-tabs b {
+  display: grid;
+  min-width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(25, 113, 245, 0.11);
+  font-size: 10px;
+}
+
+.ativelo-network-feedback {
+  max-width: 1500px;
+  margin: 0 auto 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.ativelo-network-feedback.success { color: #0e6b49; background: #e9f9f1; }
+.ativelo-network-feedback.error { color: #a82d2d; background: #fff0f0; }
+
+.ativelo-network-overview {
+  display: grid;
+  max-width: 1500px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 auto;
+}
+
+.ativelo-network-panel {
+  min-width: 0;
+  min-height: 300px;
+  padding: 23px;
+  border: 1px solid #e0e6ef;
+  border-radius: 21px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(24, 42, 74, 0.07);
+}
+
+.ativelo-network-panel.wide { grid-column: 1 / -1; }
+
+.ativelo-network-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.ativelo-network-panel-heading span {
+  color: #1971f5;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+}
+
+.ativelo-network-panel-heading h2 {
+  margin: 5px 0 0;
+  font-size: 22px;
+}
+
+.ativelo-network-panel-heading > button {
+  padding: 7px;
+  border: 0;
+  color: #1971f5;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ativelo-network-empty {
+  display: flex;
+  min-height: 260px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  flex-direction: column;
+  color: #748197;
+  text-align: center;
+}
+
+.ativelo-network-empty.compact { min-height: 120px; }
+.ativelo-network-empty svg { color: #1971f5; }
+.ativelo-network-empty strong { color: #27374d; }
+
+.ativelo-last-scan {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 15px;
+  min-height: 185px;
+  padding: 20px;
+  border: 1px solid #e2e8f1;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #f7fbff, #eef5ff);
+}
+
+.ativelo-last-scan > i {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  border-radius: 18px;
+  color: #1971f5;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(25, 113, 245, 0.12);
+}
+
+.ativelo-last-scan > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-last-scan strong { font-size: 17px; }
+.ativelo-last-scan span { margin-top: 5px; color: #53657c; font-size: 12px; }
+.ativelo-last-scan small { margin-top: 4px; color: #8490a2; }
+
+.ativelo-last-scan > b {
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: #0d7650;
+  background: #e7f8ef;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.ativelo-network-health {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ativelo-network-health > div {
+  display: grid;
+  grid-template-columns: 11px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 16px 12px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.ativelo-network-health i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ativelo-network-health i.online { background: #19a974; }
+.ativelo-network-health i.offline { background: #9aa7b8; }
+.ativelo-network-health i.pending { background: #e5a230; }
+
+.ativelo-network-health span {
+  display: flex;
+  flex-direction: column;
+}
+
+.ativelo-network-health strong { font-size: 13px; }
+.ativelo-network-health small { margin-top: 3px; color: #748197; }
+
+.ativelo-network-preview-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ativelo-network-preview-list > div {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 13px;
+  border: 1px solid #e3e8f0;
+  border-radius: 14px;
+  background: #fbfcfe;
+}
+
+.ativelo-network-preview-list i {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  color: #1971f5;
+  background: #eaf3ff;
+}
+
+.ativelo-network-preview-list span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-network-preview-list strong,
+.ativelo-network-preview-list small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-network-preview-list strong { font-size: 12px; }
+.ativelo-network-preview-list small { margin-top: 3px; color: #8490a2; font-size: 9px; }
+.ativelo-network-preview-list b { color: #1971f5; font-size: 9px; text-transform: uppercase; }
+
+.ativelo-agent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ativelo-agent-list > article {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 14px;
+  padding: 15px;
+  border: 1px solid #e1e7ef;
+  border-radius: 17px;
+  background: #fbfcfe;
+}
+
+.ativelo-agent-list > article > i {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: 15px;
+  color: #718095;
+  background: #edf1f5;
+}
+
+.ativelo-agent-list > article > i.online {
+  color: #0f8d61;
+  background: #e7f8ef;
+}
+
+.ativelo-agent-main header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.ativelo-agent-main h3 { margin: 0; font-size: 15px; }
+.ativelo-agent-main header span { display: block; margin-top: 4px; color: #748197; font-size: 10px; }
+.ativelo-agent-main header b {
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: #0f7651;
+  background: #e8f8f0;
+  font-size: 9px;
+}
+
+.ativelo-agent-main dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.ativelo-agent-main dl div {
+  padding: 9px;
+  border-radius: 10px;
+  background: #f0f4f8;
+}
+
+.ativelo-agent-main dt { color: #8490a2; font-size: 8px; text-transform: uppercase; }
+.ativelo-agent-main dd {
+  margin: 4px 0 0;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-agent-main footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ativelo-agent-main footer select {
+  min-width: 260px;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid #dce3ed;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.ativelo-agent-main footer button,
+.ativelo-discovery-table button,
+.ativelo-token-list button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 11px;
+  border: 1px solid #dce3ed;
+  border-radius: 10px;
+  color: #335274;
+  background: #fff;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-discovery-table-wrapper { overflow-x: auto; }
+
+.ativelo-discovery-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ativelo-discovery-table th {
+  padding: 11px 13px;
+  color: #748197;
+  font-size: 9px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.ativelo-discovery-table td {
+  padding: 14px 13px;
+  border-top: 1px solid #edf0f5;
+  color: #33435a;
+  font-size: 11px;
+}
+
+.ativelo-discovery-table td strong,
+.ativelo-discovery-table td small { display: block; }
+
+.ativelo-discovery-table td small { margin-top: 3px; color: #8490a2; font-size: 9px; }
+.ativelo-discovery-table button { color: #1971f5; background: #edf5ff; border: 0; white-space: nowrap; }
+
+.ativelo-enrollment-grid {
+  display: grid;
+  max-width: 1500px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 auto;
+}
+
+.ativelo-token-form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.ativelo-token-form > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.ativelo-token-form label,
+.ativelo-discovery-modal form > label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ativelo-token-form label > span,
+.ativelo-discovery-modal label > span {
+  color: #415066;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-token-form input,
+.ativelo-discovery-modal input,
+.ativelo-discovery-modal select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dce3ed;
+  border-radius: 11px;
+  outline: none;
+  background: #fbfcfe;
+}
+
+.ativelo-generated-token {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  margin-top: 18px;
+  padding: 15px;
+  border: 1px solid #a8d1b8;
+  border-radius: 14px;
+  background: #effaf4;
+}
+
+.ativelo-generated-token code,
+.ativelo-command-list code {
+  display: block;
+  overflow-x: auto;
+  padding: 11px;
+  border-radius: 10px;
+  color: #dbeafe;
+  background: #102548;
+  font-size: 10px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.ativelo-generated-token small { color: #557160; line-height: 1.45; }
+.ativelo-generated-token button { align-self: flex-start; }
+
+.ativelo-command-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ativelo-command-list section {
+  padding: 15px;
+  border: 1px solid #e1e7ef;
+  border-radius: 15px;
+  background: #fbfcfe;
+}
+
+.ativelo-command-list header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #1971f5;
+}
+
+.ativelo-command-list header strong { color: #27374d; }
+.ativelo-command-list p { color: #65748a; font-size: 10px; line-height: 1.5; }
+.ativelo-command-list button { margin-top: 10px; min-height: 36px; }
+
+.ativelo-token-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ativelo-token-list > div {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  border: 1px solid #e3e8f0;
+  border-radius: 13px;
+  background: #fbfcfe;
+}
+
+.ativelo-token-list i {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  color: #1971f5;
+  background: #eaf3ff;
+}
+
+.ativelo-token-list span { display: flex; min-width: 0; flex-direction: column; }
+.ativelo-token-list strong { font-size: 12px; }
+.ativelo-token-list small { margin-top: 3px; color: #8490a2; font-size: 9px; }
+.ativelo-token-list b { color: #1971f5; font-size: 9px; text-transform: uppercase; }
+
+.ativelo-agent-detail-modal { width: min(1050px, 100%); }
+.ativelo-discovery-modal { width: min(620px, 100%); }
+
+.ativelo-agent-detail-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 22px;
+}
+
+.ativelo-agent-detail-summary article {
+  padding: 12px;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  background: #fbfcfe;
+}
+
+.ativelo-agent-detail-summary small { color: #8490a2; font-size: 8px; text-transform: uppercase; }
+.ativelo-agent-detail-summary strong { display: block; margin-top: 5px; font-size: 11px; }
+
+.ativelo-json-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 22px 24px;
+}
+
+.ativelo-json-grid section {
+  min-width: 0;
+  padding: 14px;
+  border-radius: 13px;
+  background: #102548;
+}
+
+.ativelo-json-grid h3 { margin: 0 0 10px; color: #fff; font-size: 12px; }
+.ativelo-json-grid pre {
+  max-height: 360px;
+  overflow: auto;
+  margin: 0;
+  color: #c9ddff;
+  font-size: 9px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ativelo-discovery-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 22px;
+}
+
+.ativelo-discovery-data {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 11px;
+  color: #53657c;
+  background: #f0f4f8;
+  font-size: 10px;
+}
+
+.ativelo-discovery-modal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 5px;
+}
+
+.ativelo-discovery-modal footer button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 14px;
+  border-radius: 11px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+@media (max-width: 1100px) {
+  .ativelo-network-preview-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ativelo-agent-main dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ativelo-json-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 850px) {
+  .ativelo-network-overview,
+  .ativelo-enrollment-grid { grid-template-columns: 1fr; }
+  .ativelo-network-panel.wide { grid-column: auto; }
+  .ativelo-network-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ativelo-agent-detail-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+  .ativelo-network-page { padding: 22px 14px 50px; }
+  .ativelo-network-header { align-items: stretch; flex-direction: column; }
+  .ativelo-network-header-actions { width: 100%; }
+  .ativelo-network-header-actions button { flex: 1; }
+  .ativelo-network-panel { padding: 17px 13px; }
+  .ativelo-network-preview-list { grid-template-columns: 1fr; }
+  .ativelo-agent-list > article { grid-template-columns: 1fr; }
+  .ativelo-agent-main header { flex-direction: column; }
+  .ativelo-agent-main footer select { width: 100%; min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  .ativelo-network-metrics { grid-template-columns: 1fr; }
+  .ativelo-token-form > div { grid-template-columns: 1fr; }
+  .ativelo-agent-main dl { grid-template-columns: 1fr; }
+  .ativelo-agent-detail-summary { grid-template-columns: 1fr; }
+  .ativelo-token-list > div { grid-template-columns: 42px minmax(0, 1fr); }
+  .ativelo-token-list > div > b,
+  .ativelo-token-list > div > button { grid-column: 2; }
+}
+
+
+/* PACKAGE 16: ONE-LINE WINDOWS DEPLOYMENT */
+
+.ativelo-one-line-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid #b9e4cf;
+  border-radius: 14px;
+  color: #0e6b49;
+  background: #ecfaf3;
+}
+
+.ativelo-one-line-notice > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.ativelo-one-line-notice > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ativelo-one-line-notice strong {
+  font-size: 12px;
+}
+
+.ativelo-one-line-notice span {
+  color: #4d6b5d;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.ativelo-command-list section.featured {
+  border-color: #8bb8f5;
+  background:
+    linear-gradient(145deg, rgba(234, 243, 255, 0.86), #ffffff);
+  box-shadow: 0 12px 28px rgba(25, 113, 245, 0.08);
+}
+
+.ativelo-command-list section.management {
+  border-style: dashed;
+  background: #f8fafc;
+}
+
+.ativelo-subnet-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ativelo-subnet-field span {
+  color: #415066;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-subnet-field input {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #dce3ed;
+  border-radius: 11px;
+  outline: none;
+  color: #142033;
+  background: #ffffff;
+}
+
+.ativelo-subnet-field input:focus {
+  border-color: #4b91ef;
+  box-shadow: 0 0 0 4px rgba(25, 113, 245, 0.09);
+}
+
+.ativelo-agent-command-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ativelo-agent-command-buttons button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid #dce3ed;
+  border-radius: 10px;
+  color: #315071;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-agent-command-buttons button.danger {
+  border-color: #efc0c0;
+  color: #aa3030;
+  background: #fff5f5;
+}
+
+@media (max-width: 700px) {
+  .ativelo-agent-command-buttons {
+    flex-direction: column;
+  }
+
+  .ativelo-agent-command-buttons button {
+    width: 100%;
+  }
+}

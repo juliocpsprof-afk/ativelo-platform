@@ -1,0 +1,1292 @@
+.organization-brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.organization-brand > img,
+.organization-brand-placeholder {
+  width: 74px;
+  height: 74px;
+  flex: 0 0 74px;
+  border: 1px solid #dfe6ef;
+  border-radius: 17px;
+  background: #fff;
+  object-fit: contain;
+  box-shadow: 0 10px 24px rgba(19, 43, 78, 0.09);
+}
+
+.organization-brand-placeholder {
+  display: grid;
+  place-items: center;
+  color: #1971f5;
+  background: linear-gradient(145deg, #edf5ff, #fff);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.organization-brand > div:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.organization-brand strong,
+.organization-brand span,
+.organization-brand small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.organization-brand strong {
+  color: #15263e;
+  font-size: 18px;
+}
+
+.organization-brand span {
+  margin-top: 4px;
+  color: #5f6f84;
+  font-size: 11px;
+}
+
+.organization-brand small {
+  margin-top: 5px;
+  color: #8490a2;
+  font-size: 9px;
+}
+
+.organization-brand.compact > img,
+.organization-brand.compact .organization-brand-placeholder {
+  width: 54px;
+  height: 54px;
+  flex-basis: 54px;
+  border-radius: 14px;
+}
+
+.organization-brand.compact strong {
+  font-size: 14px;
+}
+
+.ativelo-company-sidebar-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 4px 22px;
+  padding: 15px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 16px 34px rgba(0, 13, 39, 0.2);
+}
+
+.ativelo-company-sidebar-brand .organization-brand {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.ativelo-company-sidebar-brand .organization-brand > img,
+.ativelo-company-sidebar-brand .organization-brand-placeholder {
+  width: 100%;
+  height: 94px;
+  flex-basis: 94px;
+  border: 0;
+  box-shadow: none;
+}
+
+.ativelo-company-sidebar-brand .organization-brand strong {
+  color: #10233e;
+  font-size: 15px;
+}
+
+.ativelo-company-sidebar-brand .organization-brand span,
+.ativelo-company-sidebar-brand .organization-brand small {
+  color: #66788e;
+}
+
+.ativelo-sidebar-app-signature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #e4e9f0;
+}
+
+.ativelo-sidebar-app-signature img {
+  width: 86px;
+  height: auto;
+  object-fit: contain;
+}
+
+.ativelo-sidebar-app-signature span {
+  color: #758397;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.ativelo-settings-page {
+  min-height: 100vh;
+  padding: 34px clamp(16px, 4vw, 54px) 70px;
+  color: #142033;
+  background:
+    radial-gradient(circle at 94% 5%, rgba(25, 113, 245, 0.08), transparent 28%),
+    #f4f7fb;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.ativelo-settings-page * {
+  box-sizing: border-box;
+}
+
+.ativelo-settings-page button,
+.ativelo-settings-page input,
+.ativelo-settings-page select,
+.ativelo-settings-page textarea {
+  font: inherit;
+}
+
+.ativelo-settings-header {
+  display: flex;
+  max-width: 1500px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 auto 24px;
+}
+
+.ativelo-settings-header > div:first-child > button {
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+  color: #1971f5;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.ativelo-settings-header p {
+  margin: 0 0 6px;
+  color: #1971f5;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+
+.ativelo-settings-header h1 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 52px);
+  letter-spacing: -1.8px;
+}
+
+.ativelo-settings-header > div:first-child > span {
+  display: block;
+  max-width: 780px;
+  margin-top: 8px;
+  color: #748197;
+  line-height: 1.55;
+}
+
+.ativelo-settings-sections {
+  display: grid;
+  max-width: 1500px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 auto 18px;
+}
+
+.ativelo-settings-sections button {
+  display: flex;
+  min-height: 78px;
+  align-items: center;
+  gap: 13px;
+  padding: 15px;
+  border: 1px solid #dfe6ef;
+  border-radius: 16px;
+  color: #5b6b80;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 8px 22px rgba(24, 42, 74, 0.04);
+}
+
+.ativelo-settings-sections button > svg {
+  flex: 0 0 auto;
+}
+
+.ativelo-settings-sections button > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-settings-sections button strong {
+  color: #26364c;
+  font-size: 13px;
+}
+
+.ativelo-settings-sections button small {
+  margin-top: 4px;
+  color: #8490a2;
+  font-size: 9px;
+}
+
+.ativelo-settings-sections button.active {
+  border-color: #7db0f8;
+  color: #1971f5;
+  background: #edf5ff;
+  box-shadow: 0 12px 28px rgba(25, 113, 245, 0.09);
+}
+
+.ativelo-settings-feedback {
+  max-width: 1500px;
+  margin: 0 auto 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.ativelo-settings-feedback.success {
+  color: #0e6b49;
+  background: #e9f9f1;
+}
+
+.ativelo-settings-feedback.error {
+  color: #a82d2d;
+  background: #fff0f0;
+}
+
+.ativelo-settings-feedback.warning {
+  color: #805500;
+  background: #fff4dc;
+}
+
+.ativelo-settings-loading {
+  display: grid;
+  max-width: 1500px;
+  min-height: 420px;
+  place-items: center;
+  margin: 0 auto;
+  border: 1px solid #e0e6ef;
+  border-radius: 20px;
+  color: #748197;
+  background: #fff;
+}
+
+.ativelo-company-settings {
+  display: grid;
+  max-width: 1500px;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 17px;
+  margin: 0 auto;
+}
+
+.ativelo-company-brand-card,
+.ativelo-company-form-card {
+  padding: 22px;
+  border: 1px solid #e0e6ef;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(24, 42, 74, 0.06);
+}
+
+.ativelo-company-brand-card {
+  grid-row: span 2;
+  align-self: start;
+}
+
+.ativelo-company-logo-preview {
+  display: grid;
+  min-height: 190px;
+  place-items: center;
+  overflow: hidden;
+  padding: 20px;
+  border: 1px dashed #b5c6da;
+  border-radius: 16px;
+  background: #f8fbff;
+}
+
+.ativelo-company-logo-preview img {
+  width: 100%;
+  max-height: 170px;
+  object-fit: contain;
+}
+
+.ativelo-company-logo-preview > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-direction: column;
+  color: #1971f5;
+}
+
+.ativelo-company-logo-preview > div strong {
+  color: #3e526e;
+}
+
+.ativelo-company-logo-actions {
+  display: flex;
+  gap: 9px;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+.ativelo-company-logo-actions > span {
+  color: #26364c;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.ativelo-company-logo-actions p {
+  margin: 0;
+  color: #748197;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.ativelo-company-logo-actions label,
+.ativelo-company-logo-actions button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 11px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-company-logo-actions label {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background: #1971f5;
+}
+
+.ativelo-company-logo-actions label input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ativelo-company-logo-actions button {
+  border: 1px solid #efc2c2;
+  color: #aa3030;
+  background: #fff5f5;
+}
+
+.ativelo-brand-hierarchy-preview {
+  margin-top: 18px;
+  padding: 15px;
+  border-radius: 15px;
+  background: #f5f8fc;
+}
+
+.ativelo-brand-hierarchy-preview > span {
+  display: block;
+  margin-bottom: 13px;
+  color: #718095;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ativelo-platform-signature {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid #dfe6ef;
+}
+
+.ativelo-platform-signature small {
+  color: #8490a2;
+  font-size: 8px;
+}
+
+.ativelo-platform-signature img {
+  width: 86px;
+  height: auto;
+}
+
+.ativelo-settings-card-heading span,
+.ativelo-master-content > header span,
+.ativelo-master-navigation > span {
+  color: #1971f5;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+}
+
+.ativelo-settings-card-heading h2,
+.ativelo-master-content > header h2 {
+  margin: 5px 0 0;
+  font-size: 21px;
+}
+
+.ativelo-company-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ativelo-company-form-card .two,
+.ativelo-company-form-card .three,
+.ativelo-company-form-card .four,
+.ativelo-settings-modal .two,
+.ativelo-settings-modal .three {
+  display: grid;
+  gap: 12px;
+}
+
+.ativelo-company-form-card .two,
+.ativelo-settings-modal .two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ativelo-company-form-card .three,
+.ativelo-settings-modal .three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ativelo-company-form-card .four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ativelo-company-form-card .three.address {
+  grid-template-columns: 150px minmax(260px, 1fr) 130px;
+}
+
+.ativelo-company-form-card label,
+.ativelo-settings-modal label {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ativelo-company-form-card label > span,
+.ativelo-settings-modal label > span {
+  color: #415066;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-company-form-card input,
+.ativelo-company-form-card select,
+.ativelo-company-form-card textarea,
+.ativelo-settings-modal input,
+.ativelo-settings-modal select,
+.ativelo-settings-modal textarea {
+  width: 100%;
+  min-height: 43px;
+  padding: 0 12px;
+  border: 1px solid #dce3ed;
+  border-radius: 11px;
+  outline: none;
+  color: #142033;
+  background: #fbfcfe;
+}
+
+.ativelo-company-form-card textarea,
+.ativelo-settings-modal textarea {
+  padding-top: 11px;
+  resize: vertical;
+}
+
+.ativelo-company-form-card input:focus,
+.ativelo-company-form-card select:focus,
+.ativelo-company-form-card textarea:focus,
+.ativelo-settings-modal input:focus,
+.ativelo-settings-modal select:focus,
+.ativelo-settings-modal textarea:focus {
+  border-color: #4b91ef;
+  box-shadow: 0 0 0 4px rgba(25, 113, 245, 0.09);
+}
+
+.ativelo-company-form-card footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.ativelo-company-form-card footer button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.ativelo-master-layout {
+  display: grid;
+  max-width: 1500px;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 17px;
+  margin: 0 auto;
+}
+
+.ativelo-master-navigation,
+.ativelo-master-content {
+  border: 1px solid #e0e6ef;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(24, 42, 74, 0.06);
+}
+
+.ativelo-master-navigation {
+  align-self: start;
+  padding: 18px 12px;
+}
+
+.ativelo-master-navigation > span {
+  display: block;
+  padding: 0 8px 12px;
+}
+
+.ativelo-master-navigation > button {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 6px;
+  padding: 11px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  color: #5d6c80;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ativelo-master-navigation > button.active {
+  border-color: #9bc2f8;
+  color: #1971f5;
+  background: #eef5ff;
+}
+
+.ativelo-master-navigation i {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  color: #1971f5;
+  background: #eaf3ff;
+}
+
+.ativelo-master-navigation button > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-master-navigation strong {
+  color: #26364c;
+  font-size: 11px;
+}
+
+.ativelo-master-navigation small {
+  margin-top: 4px;
+  color: #8490a2;
+  font-size: 8px;
+  line-height: 1.35;
+}
+
+.ativelo-master-content {
+  min-height: 620px;
+  padding: 22px;
+}
+
+.ativelo-master-content > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.ativelo-master-content > header p {
+  margin: 6px 0 0;
+  color: #748197;
+  font-size: 10px;
+}
+
+.ativelo-master-content > header > button,
+.ativelo-settings-modal footer button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: 11px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-master-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 18px 0 14px;
+}
+
+.ativelo-master-toolbar label {
+  display: flex;
+  min-width: 240px;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid #dfe6ef;
+  border-radius: 12px;
+  color: #748197;
+  background: #fbfcfe;
+}
+
+.ativelo-master-toolbar input {
+  width: 100%;
+  min-height: 43px;
+  border: 0;
+  outline: none;
+  background: transparent;
+}
+
+.ativelo-master-toolbar > b {
+  color: #748197;
+  font-size: 10px;
+}
+
+.ativelo-master-empty {
+  display: flex;
+  min-height: 360px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-direction: column;
+  color: #748197;
+  text-align: center;
+}
+
+.ativelo-master-empty svg {
+  color: #1971f5;
+}
+
+.ativelo-master-empty strong {
+  color: #26364c;
+}
+
+.ativelo-master-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.ativelo-master-list article {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid #e1e7ef;
+  border-radius: 15px;
+  background: #fbfcfe;
+}
+
+.ativelo-master-list article.inactive {
+  opacity: 0.62;
+  background: #f1f3f6;
+}
+
+.ativelo-master-list article > i {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 13px;
+  color: #1971f5;
+  background: #eaf3ff;
+}
+
+.ativelo-master-list article > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-master-list article > div strong,
+.ativelo-master-list article > div span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-master-list article > div strong {
+  font-size: 12px;
+}
+
+.ativelo-master-list article > div span {
+  margin-top: 4px;
+  color: #748197;
+  font-size: 9px;
+}
+
+.ativelo-master-list article > b {
+  padding: 5px 7px;
+  border-radius: 8px;
+  color: #0e6b49;
+  background: #e9f9f1;
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.ativelo-master-list article.inactive > b {
+  color: #59677a;
+  background: #e2e6eb;
+}
+
+.ativelo-master-list article > footer {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #e5eaf1;
+}
+
+.ativelo-master-list article > footer button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid #dce3ed;
+  border-radius: 9px;
+  color: #315071;
+  background: #fff;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.ativelo-master-list article > footer button.deactivate {
+  color: #aa3030;
+  background: #fff5f5;
+}
+
+.ativelo-master-list article > footer button.activate {
+  color: #0e6b49;
+  background: #effaf5;
+}
+
+.ativelo-settings-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.settings-active-field {
+  display: flex !important;
+  align-items: center;
+  gap: 9px !important;
+  flex-direction: row !important;
+  padding: 12px;
+  border-radius: 11px;
+  background: #f3f7fb;
+}
+
+.settings-active-field input {
+  width: 18px !important;
+  min-height: auto !important;
+  height: 18px;
+}
+
+.ativelo-settings-modal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding-top: 5px;
+}
+
+@media (max-width: 1050px) {
+  .ativelo-company-settings {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-company-brand-card {
+    grid-row: auto;
+  }
+
+  .ativelo-master-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 850px) {
+  .ativelo-settings-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-master-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-master-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ativelo-master-navigation > span {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .ativelo-settings-page {
+    padding: 22px 14px 50px;
+  }
+
+  .ativelo-settings-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ativelo-company-form-card .two,
+  .ativelo-company-form-card .three,
+  .ativelo-company-form-card .four,
+  .ativelo-company-form-card .three.address,
+  .ativelo-settings-modal .two,
+  .ativelo-settings-modal .three {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-master-content {
+    padding: 17px 13px;
+  }
+
+  .ativelo-master-content > header {
+    flex-direction: column;
+  }
+
+  .ativelo-master-content > header > button {
+    width: 100%;
+  }
+
+  .ativelo-master-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ativelo-master-toolbar label {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .ativelo-master-navigation {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* PACKAGE 21: COMMUNICATION AND PERSONALIZED INVITATIONS */
+
+.ativelo-communication-settings {
+  display: flex;
+  max-width: 1500px;
+  gap: 17px;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.ativelo-communication-settings.loading {
+  display: grid;
+  min-height: 420px;
+  place-items: center;
+  border: 1px solid #e0e6ef;
+  border-radius: 20px;
+  color: #748197;
+  background: #fff;
+}
+
+.ativelo-communication-hero,
+.ativelo-communication-card {
+  padding: 22px;
+  border: 1px solid #e0e6ef;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(24, 42, 74, 0.06);
+}
+
+.ativelo-communication-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.ativelo-communication-hero > div:first-child > span,
+.ativelo-communication-card header > div > span {
+  color: #1971f5;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+}
+
+.ativelo-communication-hero h2,
+.ativelo-communication-card h3 {
+  margin: 5px 0 0;
+  color: #1f3047;
+}
+
+.ativelo-communication-hero p {
+  max-width: 760px;
+  margin: 8px 0 0;
+  color: #748197;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.ativelo-communication-feedback {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.ativelo-communication-feedback.success {
+  color: #0e6b49;
+  background: #e9f9f1;
+}
+
+.ativelo-communication-feedback.error {
+  color: #a82d2d;
+  background: #fff0f0;
+}
+
+.ativelo-communication-feedback.warning {
+  color: #805500;
+  background: #fff4dc;
+}
+
+.ativelo-integration-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ativelo-integration-status-grid article {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e1e7ef;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.ativelo-integration-status-grid article.connected {
+  border-color: #b9e4cf;
+  background: #f2fbf6;
+}
+
+.ativelo-integration-status-grid article.pending {
+  border-color: #f0d49a;
+  background: #fffaf0;
+}
+
+.ativelo-integration-status-grid article.manual {
+  border-color: #bfd5f5;
+  background: #f4f8ff;
+}
+
+.ativelo-integration-status-grid i {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 13px;
+  color: #1971f5;
+  background: #eaf3ff;
+}
+
+.ativelo-integration-status-grid article > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.ativelo-integration-status-grid strong {
+  color: #26364c;
+  font-size: 12px;
+}
+
+.ativelo-integration-status-grid span {
+  margin-top: 4px;
+  color: #748197;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.ativelo-integration-status-grid b {
+  padding: 6px 8px;
+  border-radius: 999px;
+  color: #0e6b49;
+  background: #e1f5ea;
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.ativelo-integration-status-grid article.pending b {
+  color: #805500;
+  background: #fff0cf;
+}
+
+.ativelo-integration-status-grid article.manual b {
+  color: #245b9e;
+  background: #e3efff;
+}
+
+.ativelo-communication-card {
+  display: flex;
+  gap: 14px;
+  flex-direction: column;
+}
+
+.ativelo-communication-card > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.ativelo-communication-card .two,
+.ativelo-communication-card .three {
+  display: grid;
+  gap: 12px;
+}
+
+.ativelo-communication-card .two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ativelo-communication-card .three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ativelo-communication-card label {
+  display: flex;
+  min-width: 0;
+  gap: 7px;
+  flex-direction: column;
+}
+
+.ativelo-communication-card label > span {
+  color: #415066;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-communication-card input,
+.ativelo-communication-card select,
+.ativelo-communication-card textarea {
+  width: 100%;
+  min-height: 43px;
+  padding: 0 12px;
+  border: 1px solid #dce3ed;
+  border-radius: 11px;
+  outline: none;
+  color: #142033;
+  background: #fbfcfe;
+}
+
+.ativelo-communication-card input[type="color"] {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.ativelo-communication-card textarea {
+  padding-top: 11px;
+  resize: vertical;
+}
+
+.ativelo-communication-card label small {
+  color: #8490a2;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.ativelo-communication-switch {
+  display: flex !important;
+  align-items: center;
+  gap: 9px !important;
+  flex-direction: row !important;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: #f3f7fb;
+}
+
+.ativelo-communication-switch input {
+  width: 18px;
+  min-height: auto;
+  height: 18px;
+}
+
+.ativelo-email-preview {
+  overflow: hidden;
+  padding: 0 22px 22px;
+  border: 1px solid #e0e6ef;
+  border-radius: 17px;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.ativelo-email-preview-bar {
+  height: 7px;
+  margin: 0 -22px 20px;
+}
+
+.ativelo-email-preview h4 {
+  margin: 18px 0 8px;
+  color: #21334b;
+  font-size: 20px;
+}
+
+.ativelo-email-preview > p {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #617086;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.ativelo-email-preview > button {
+  margin-top: 18px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 11px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.ativelo-email-preview > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid #e1e7ef;
+  color: #8490a2;
+  font-size: 9px;
+  text-align: left;
+}
+
+.ativelo-email-preview > footer img {
+  width: 96px;
+  height: auto;
+}
+
+.ativelo-communication-card > button.secondary {
+  align-self: flex-start;
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid #dce3ed;
+  border-radius: 11px;
+  color: #315071;
+  background: #fff;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ativelo-communication-card > button.secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ativelo-whatsapp-mode-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 13px;
+  color: #255a43;
+  background: #eefaf4;
+}
+
+.ativelo-whatsapp-mode-note svg {
+  flex: 0 0 auto;
+}
+
+.ativelo-whatsapp-mode-note p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.ativelo-communication-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ativelo-communication-actions button {
+  display: inline-flex;
+  min-height: 45px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+@media (max-width: 1050px) {
+  .ativelo-integration-status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .ativelo-settings-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ativelo-communication-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ativelo-communication-card .three {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .ativelo-settings-sections,
+  .ativelo-communication-card .two {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-communication-card > header,
+  .ativelo-email-preview > footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ativelo-communication-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+}

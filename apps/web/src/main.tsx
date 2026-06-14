@@ -3,7 +3,16 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import "./ativelo-ui.css";
-import "./ativelo-catalog.css";
+import "./ativelo-branding.css";
+import "./ativelo-assets.css";
+import "./ativelo-asset-tools.css";
+import "./ativelo-support.css";
+import "./ativelo-logistics.css";
+import "./ativelo-network.css";
+import "./ativelo-capture.css";
+import "./ativelo-audit-reports.css";
+import "./ativelo-settings.css";
+import "./ativelo-users.css";
 
 const rootElement = document.getElementById("root");
 
