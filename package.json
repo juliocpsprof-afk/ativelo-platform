@@ -8,6 +8,15 @@
                     "dev":  "pnpm -C apps/web dev",
                     "build":  "pnpm -C apps/web build",
                     "preview":  "pnpm -C apps/web preview",
-                    "typecheck":  "pnpm --filter @ativelo/web typecheck"
-                }
+                    "typecheck":  "pnpm --filter @ativelo/web typecheck",
+                    "cf:login":  "wrangler login",
+                    "cf:whoami":  "wrangler whoami",
+                    "cf:pages:preview":  "pnpm build \u0026\u0026 wrangler pages dev apps/web/dist",
+                    "cf:worker:dev":  "wrangler dev --config cloudflare/worker/wrangler.jsonc",
+                    "cf:worker:check":  "wrangler deploy --dry-run --config cloudflare/worker/wrangler.jsonc --outdir cloudflare/.dry-run",
+                    "cf:worker:deploy":  "wrangler deploy --config cloudflare/worker/wrangler.jsonc"
+                },
+    "devDependencies":  {
+                            "wrangler":  "^4.100.0"
+                        }
 }

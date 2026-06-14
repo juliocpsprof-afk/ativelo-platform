@@ -28,3 +28,7 @@ repair-encoding-temp.cjs
 .vscode/*.local
 backup-package-*/
 **/backup-package-*/
+ativelo-auditoria.txt
+.wrangler/
+.dev.vars
+cloudflare/.dry-run/

@@ -1,0 +1,32 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "ativelo-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-14",
+  "workers_dev": true,
+  "vars": {
+    "APP_ENV": "production",
+    "ALLOWED_ORIGIN": "https://SEU-PROJETO.pages.dev"
+  },
+  "queues": {
+    "producers": [
+      {
+        "binding": "ATIVELO_JOBS",
+        "queue": "ativelo-jobs"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "ativelo-jobs",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+        "max_retries": 3
+      }
+    ]
+  },
+  "triggers": {
+    "crons": [
+      "0 * * * *"
+    ]
+  }
+}

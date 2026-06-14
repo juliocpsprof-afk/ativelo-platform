@@ -1,0 +1,11 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "ativelo-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-14",
+  "workers_dev": true,
+  "vars": {
+    "APP_ENV": "development",
+    "ALLOWED_ORIGIN": "http://localhost:5173"
+  }
+}
