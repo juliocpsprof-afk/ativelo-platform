@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { WorkerSessionProvider } from "./contexts/WorkerSessionContext";
+import WorkerSessionStatus from "./components/WorkerSessionStatus";
 import { supabase, supabaseConfigurationError } from "./lib/supabase";
 import AuditReportsPage from "./pages/AuditReportsPage";
 import type { AuditReportsTab } from "./pages/AuditReportsPage";
@@ -340,7 +342,10 @@ function AppContent() {
 export default function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <WorkerSessionProvider>
+        <WorkerSessionStatus />
+        <AppContent />
+      </WorkerSessionProvider>
     </AuthProvider>
   );
 }

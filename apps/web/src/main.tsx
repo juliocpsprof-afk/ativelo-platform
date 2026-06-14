@@ -13,6 +13,7 @@ import "./ativelo-capture.css";
 import "./ativelo-audit-reports.css";
 import "./ativelo-settings.css";
 import "./ativelo-users.css";
+import "./ativelo-worker.css";
 
 const rootElement = document.getElementById("root");
 
