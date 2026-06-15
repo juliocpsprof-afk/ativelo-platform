@@ -15,8 +15,7 @@ import {
 } from "../lib/barcodeVision";
 import { supabase } from "../lib/supabase";
 import type { AssetRecord } from "../types/assets";
-import { statusLabels } from "../types/assets";
-
+import ScannerAssetResultModal from "../components/ScannerAssetResultModal";
 type Props = {
   organization: OrganizationContext;
   onBack: () => void;
@@ -831,83 +830,53 @@ export default function ScannerPage({
               {stage}
             </div>
           )}
-        </article>
+        </article>      <article className="ativelo-scanner-result ativelo-scanner-feedback-panel">
+        <span>LEITURA</span>
+        <h2>Status do scanner</h2>
 
-        <article className="ativelo-scanner-result">
-          <span>RESULTADO</span>
-          <h2>Equipamento identificado</h2>
+        {isResolving ? (
+          <div className="ativelo-scanner-empty">
+            <AppIcon name="scan" size={38} />
+            <strong>Analisando a etiqueta...</strong>
+            <span>{stage || "Aguarde."}</span>
+          </div>
+        ) : message && !resultAsset ? (
+          <div className="ativelo-scanner-message">
+            {message}
+          </div>
+        ) : (
+          <div className="ativelo-scanner-empty">
+            <AppIcon name="scan" size={38} />
+            <strong>Aguardando leitura</strong>
+            <span>
+              O resultado será aberto em uma janela
+              assim que a etiqueta for identificada.
+            </span>
+          </div>
+        )}
+      </article>
+    </section>
 
-          {isResolving ? (
-            <div className="ativelo-scanner-empty">
-              <AppIcon name="scan" size={38} />
-              <strong>Analisando a etiqueta...</strong>
-              <span>{stage || "Aguarde."}</span>
-            </div>
-          ) : resultAsset ? (
-            <div className="ativelo-scanner-asset">
-              <span className="status">
-                {statusLabels[
-                  resultAsset.operational_status
-                ] ??
-                  resultAsset.operational_status}
-              </span>
-
-              <h3>{resultAsset.name}</h3>
-              <strong>{resultAsset.asset_number}</strong>
-
-              <dl>
-                <div>
-                  <dt>Serial</dt>
-                  <dd>
-                    {resultAsset.serial_number ||
-                      "Não informado"}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Hostname</dt>
-                  <dd>
-                    {resultAsset.hostname ||
-                      "Não informado"}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Responsável</dt>
-                  <dd>
-                    {resultAsset.assigned_person_name ||
-                      "Não atribuído"}
-                  </dd>
-                </div>
-              </dl>
-
-              <button
-                type="button"
-                className="primary"
-                onClick={() =>
-                  onOpenAsset(resultAsset.id)
-                }
-              >
-                Abrir ficha completa
-              </button>
-            </div>
-          ) : (
-            <div className="ativelo-scanner-empty">
-              <AppIcon name="scan" size={38} />
-              <strong>Aguardando leitura</strong>
-              <span>
-                O equipamento aparecerá aqui quando qualquer
-                camada de identificação reconhecer a
-                etiqueta.
-              </span>
-            </div>
-          )}
-
-          {message && (
-            <div className="ativelo-scanner-message">
-              {message}
-            </div>
-          )}
-        </article>
-      </section>
+    {resultAsset && !isResolving && (
+      <ScannerAssetResultModal
+        asset={resultAsset}
+        onClose={() => {
+          setResultAsset(null);
+          setMessage(null);
+          handledCodeRef.current = null;
+        }}
+        onOpenAsset={() =>
+          onOpenAsset(resultAsset.id)
+        }
+        onScanAnother={() => {
+          setResultAsset(null);
+          setMessage(null);
+          setManualCode("");
+          handledCodeRef.current = null;
+          void startCamera();
+        }}
+      />
+    )}
     </main>
   );
 }

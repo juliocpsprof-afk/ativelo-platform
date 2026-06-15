@@ -1,0 +1,373 @@
+.organization-brand.logo-only {
+  width: 100%;
+  justify-content: center;
+  padding: 8px;
+}
+
+.organization-brand.logo-only > img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 84px;
+  object-fit: contain;
+}
+
+.organization-brand.logo-only
+  .organization-brand-placeholder {
+  width: 68px;
+  height: 68px;
+  font-size: 1.25rem;
+}
+
+.ativelo-scanner-result-modal {
+  width: min(620px, 100%);
+}
+
+.ativelo-scanner-result-modal__body {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+
+.ativelo-scanner-result-modal__success {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: 15px;
+  color: #166534;
+  background: #f0fdf4;
+}
+
+.ativelo-scanner-result-modal__success > svg {
+  flex: 0 0 auto;
+}
+
+.ativelo-scanner-result-modal__success div {
+  display: grid;
+  gap: 3px;
+}
+
+.ativelo-scanner-result-modal__success span {
+  color: #3f6250;
+  font-size: 0.78rem;
+}
+
+.ativelo-scanner-result-modal__identity {
+  display: grid;
+  gap: 7px;
+  padding: 18px;
+  border-radius: 17px;
+  background: #f7faff;
+}
+
+.ativelo-scanner-result-modal__identity > strong {
+  font-family:
+    "Courier New", ui-monospace, monospace;
+  font-size: clamp(1.35rem, 5vw, 2rem);
+  letter-spacing: 0.04em;
+}
+
+.ativelo-scanner-result-modal__identity > small {
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.ativelo-scanner-result-modal__grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.ativelo-scanner-result-modal__grid div {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 13px;
+}
+
+.ativelo-scanner-result-modal__grid dt {
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-scanner-result-modal__grid dd {
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+  color: #0f172a;
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.ativelo-scanner-result-modal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 24px 24px;
+}
+
+.ativelo-scanner-feedback-panel {
+  min-height: 220px;
+}
+
+.ativelo-label-print-options {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ativelo-label-batch-modal {
+  width: min(1280px, 100%);
+}
+
+.ativelo-label-batch-body {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+}
+
+.ativelo-label-batch-filters {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.ativelo-label-batch-filters .search {
+  grid-column: span 2;
+}
+
+.ativelo-label-batch-filters label,
+.ativelo-label-batch-copy-tools label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ativelo-label-batch-filters label > span,
+.ativelo-label-batch-copy-tools label > span {
+  color: #475569;
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+.ativelo-label-batch-filters input,
+.ativelo-label-batch-filters select,
+.ativelo-label-batch-copy-tools input,
+.ativelo-label-batch-copy-tools select {
+  width: 100%;
+  min-height: 43px;
+  padding: 0 11px;
+  border: 1px solid #dbe3ef;
+  border-radius: 11px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+}
+
+.ativelo-label-batch-selection-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  border-radius: 15px;
+  background: #f5f8fc;
+}
+
+.ativelo-label-batch-selection-bar > div {
+  display: grid;
+  min-width: 95px;
+  gap: 2px;
+}
+
+.ativelo-label-batch-selection-bar strong {
+  font-size: 1.15rem;
+}
+
+.ativelo-label-batch-selection-bar span {
+  color: #64748b;
+  font-size: 0.68rem;
+}
+
+.ativelo-label-batch-selection-bar button:first-of-type {
+  margin-left: auto;
+}
+
+.ativelo-label-batch-copy-tools {
+  display: grid;
+  grid-template-columns:
+    minmax(180px, 240px)
+    minmax(180px, 240px)
+    auto;
+  align-items: end;
+  gap: 11px;
+}
+
+.ativelo-label-batch-list {
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+}
+
+.ativelo-label-batch-list > header,
+.ativelo-label-batch-list > article {
+  display: grid;
+  grid-template-columns:
+    82px
+    minmax(220px, 1.5fr)
+    minmax(130px, .8fr)
+    minmax(150px, 1fr)
+    82px;
+  align-items: center;
+  gap: 12px;
+}
+
+.ativelo-label-batch-list > header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 11px 13px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ativelo-label-batch-list > article {
+  padding: 12px 13px;
+  border-bottom: 1px solid #eef2f7;
+  background: #fff;
+}
+
+.ativelo-label-batch-list > article.selected {
+  background: #f4f9ff;
+}
+
+.ativelo-label-batch-list
+  > article:last-child {
+  border-bottom: 0;
+}
+
+.ativelo-label-batch-list article > div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.ativelo-label-batch-list article strong,
+.ativelo-label-batch-list article span,
+.ativelo-label-batch-list article small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativelo-label-batch-list article span,
+.ativelo-label-batch-list article small {
+  color: #64748b;
+  font-size: 0.72rem;
+}
+
+.ativelo-label-batch-list article input[type="number"] {
+  width: 70px;
+  min-height: 38px;
+  padding: 0 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+}
+
+.ativelo-label-batch-list .checkbox {
+  display: grid;
+  place-items: center;
+}
+
+.ativelo-label-batch-list .checkbox input {
+  width: 20px;
+  height: 20px;
+  accent-color: #1971f5;
+}
+
+.ativelo-label-batch-empty {
+  padding: 42px 18px;
+  color: #64748b;
+  text-align: center;
+}
+
+.ativelo-label-batch-feedback {
+  padding: 12px 13px;
+  border-radius: 12px;
+  color: #991b1b;
+  background: #fef2f2;
+  font-size: 0.78rem;
+}
+
+.ativelo-label-batch-footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 22px;
+  border-top: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+@media (max-width: 980px) {
+  .ativelo-label-batch-filters {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .ativelo-label-batch-list {
+    overflow-x: auto;
+  }
+
+  .ativelo-label-batch-list > header,
+  .ativelo-label-batch-list > article {
+    min-width: 850px;
+  }
+}
+
+@media (max-width: 700px) {
+  .organization-brand.logo-only > img {
+    max-height: 64px;
+  }
+
+  .ativelo-scanner-result-modal__grid,
+  .ativelo-label-print-options,
+  .ativelo-label-batch-filters,
+  .ativelo-label-batch-copy-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-label-batch-filters .search {
+    grid-column: auto;
+  }
+
+  .ativelo-label-batch-selection-bar
+    button:first-of-type {
+    margin-left: 0;
+  }
+
+  .ativelo-scanner-result-modal footer,
+  .ativelo-label-batch-footer {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-scanner-result-modal footer button,
+  .ativelo-label-batch-footer button {
+    width: 100%;
+  }
+}

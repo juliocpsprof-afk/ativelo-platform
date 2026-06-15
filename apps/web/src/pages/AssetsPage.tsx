@@ -9,6 +9,7 @@ import { supabase } from "../lib/supabase";
 import type { AssetRecord } from "../types/assets";
 import { conditionLabels, lifecycleLabels, statusLabels } from "../types/assets";
 
+import AssetLabelBatchModal from "../components/AssetLabelBatchModal";
 type Props = {
   organization: OrganizationContext;
   initialAssetId?: string | null;
@@ -73,6 +74,8 @@ export default function AssetsPage({
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isQrOpen, setIsQrOpen] = useState(false);
+  const [isLabelBatchOpen, setIsLabelBatchOpen] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -275,7 +278,15 @@ export default function AssetsPage({
         </div>
 
         <div className="ativelo-assets-header-actions">
-          <button type="button" className="secondary" onClick={onOpenScanner}><AppIcon name="scan" size={18}/>Ler QR Code</button>
+          <button
+          type="button"
+          className="secondary"
+          onClick={() => setIsLabelBatchOpen(true)}
+        >
+          <AppIcon name="print" size={18} />
+          Imprimir etiquetas
+        </button>
+<button type="button" className="secondary" onClick={onOpenScanner}><AppIcon name="scan" size={18}/>Ler QR Code</button>
           <button type="button" className="secondary" onClick={() => void loadAll()}><AppIcon name="refresh" size={18}/>Atualizar</button>
           <button type="button" className="primary" onClick={openNewAsset}><AppIcon name="plus" size={18}/>Novo ativo</button>
         </div>
@@ -485,11 +496,37 @@ export default function AssetsPage({
         </div>
       )}
 
+            {isLabelBatchOpen && (
+        <AssetLabelBatchModal
+          assets={assets}
+          categories={categories}
+          units={units}
+          buildings={buildings}
+          floors={floors}
+          departments={departments}
+          rooms={rooms}
+          organizationName={
+            organization.tradeName ||
+            organization.organizationName
+          }
+          organizationLogoUrl={
+            organization.logoUrl
+          }
+          onClose={() =>
+            setIsLabelBatchOpen(false)
+          }
+        />
+      )}
+
       {isQrOpen && selectedAsset && (
         <AssetQrModal
           asset={selectedAsset}
-          organizationName={organization.organizationName}
-          onClose={() => setIsQrOpen(false)}
+          organizationName={
+          organization.tradeName ||
+          organization.organizationName
+        }
+        organizationLogoUrl={organization.logoUrl}
+        onClose={() => setIsQrOpen(false)}
         />
       )}
     </main>

@@ -135,9 +135,9 @@ export default function Dashboard({
       <aside className="ativelo-sidebar">
         <div className="ativelo-company-sidebar-brand">
           <OrganizationBrand
-            organization={organization}
-            showLegalName
-          />
+          organization={organization}
+          logoOnly
+        />
 
           <div className="ativelo-sidebar-app-signature">
             <span>Gestão tecnológica por</span>

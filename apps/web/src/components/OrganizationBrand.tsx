@@ -4,6 +4,7 @@ type Props = {
   organization: OrganizationContext;
   compact?: boolean;
   showLegalName?: boolean;
+  logoOnly?: boolean;
 };
 
 function getInitials(value: string) {
@@ -11,7 +12,10 @@ function getInitials(value: string) {
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
+    .map(
+      (part) =>
+        part[0]?.toUpperCase() ?? "",
+    )
     .join("");
 }
 
@@ -19,6 +23,7 @@ export default function OrganizationBrand({
   organization,
   compact = false,
   showLegalName = false,
+  logoOnly = false,
 }: Props) {
   const displayName =
     organization.tradeName ||
@@ -27,9 +32,18 @@ export default function OrganizationBrand({
 
   return (
     <div
-      className={`organization-brand ${
-        compact ? "compact" : ""
-      }`}
+      className={[
+        "organization-brand",
+        compact ? "compact" : "",
+        logoOnly ? "logo-only" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      aria-label={
+        logoOnly
+          ? `Marca ${displayName}`
+          : undefined
+      }
     >
       {organization.logoUrl ? (
         <img
@@ -42,19 +56,26 @@ export default function OrganizationBrand({
         </div>
       )}
 
-      <div>
-        <strong>{displayName}</strong>
+      {!logoOnly && (
+        <div>
+          <strong>{displayName}</strong>
 
-        {showLegalName &&
-          organization.legalName &&
-          organization.legalName !== displayName && (
-            <span>{organization.legalName}</span>
+          {showLegalName &&
+            organization.legalName &&
+            organization.legalName !==
+              displayName && (
+              <span>
+                {organization.legalName}
+              </span>
+            )}
+
+          {organization.cnpj && (
+            <small>
+              CNPJ {organization.cnpj}
+            </small>
           )}
-
-        {organization.cnpj && (
-          <small>CNPJ {organization.cnpj}</small>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
