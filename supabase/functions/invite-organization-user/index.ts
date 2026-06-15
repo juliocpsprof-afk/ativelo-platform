@@ -558,7 +558,7 @@ async function sendEmail(params: {
 }) {
   if (!resendApiKey || !resendFromEmail) {
     return {
-      status: "not_configured",
+      status: "manual_ready",
       providerId: null,
       error: null,
     };
@@ -617,7 +617,7 @@ async function sendWhatsappTemplate(params: {
     !whatsappPhoneNumberId
   ) {
     return {
-      status: "not_configured",
+      status: "manual_ready",
       providerId: null,
       error: null,
     };
@@ -705,8 +705,10 @@ async function createAccessLink(params: {
       options: {
         redirectTo: params.redirectTo || undefined,
         data: {
-          full_name: params.displayName,
-        },
+        full_name: params.displayName,
+        ativelo_invited: !params.existingUser,
+        must_set_password: !params.existingUser,
+      },
       },
     });
 

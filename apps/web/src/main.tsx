@@ -19,6 +19,7 @@ import "./ativelo-pwa.css";
 import "./pwa/registerServiceWorker";
 
 import "./ativelo-mobile-stability.css";
+import "./ativelo-invite-flow.css";
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {

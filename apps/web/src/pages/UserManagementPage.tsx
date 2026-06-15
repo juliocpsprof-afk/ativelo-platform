@@ -4,6 +4,11 @@ import type { OrganizationContext } from "../App";
 import AppIcon from "../components/AppIcon";
 import OrganizationBrand from "../components/OrganizationBrand";
 import { useAuth } from "../contexts/AuthContext";
+import {
+  buildManualInviteEmail,
+  openManualInviteEmail,
+  shareManualInvite,
+} from "../lib/manualInviteEmail";
 import { supabase } from "../lib/supabase";
 
 type Props = {
@@ -64,6 +69,9 @@ type InvitationResult = {
   whatsapp_message: string;
   email_error?: string | null;
   whatsapp_error?: string | null;
+  recipient_email?: string;
+  recipient_name?: string;
+  recipient_role?: string;
 };
 
 type MemberForm = {
@@ -110,7 +118,7 @@ const deliveryStatusLabels: Record<string, string> = {
   sent: "Enviado",
   failed: "Falhou",
   disabled: "Desativado",
-  not_configured: "Não configurado",
+  not_configured: "Envio manual disponível",
   not_requested: "Não solicitado",
   manual_ready: "Pronto para envio manual",
 };
@@ -319,6 +327,32 @@ export default function UserManagementPage({
     [departments, form.unitId],
   );
 
+  const manualInviteEmail = useMemo(() => {
+    if (
+      !invitationResult?.invite_url ||
+      !invitationResult.recipient_email
+    ) {
+      return null;
+    }
+
+    return buildManualInviteEmail({
+      recipientEmail:
+        invitationResult.recipient_email,
+      recipientName:
+        invitationResult.recipient_name ??
+        "Usuário",
+      companyName:
+        organization.tradeName ||
+        organization.organizationName,
+      roleLabel:
+        roleLabels[
+          invitationResult.recipient_role ?? "user"
+        ] ??
+        invitationResult.recipient_role ??
+        "Usuário",
+      inviteUrl: invitationResult.invite_url,
+    });
+  }, [invitationResult, organization]);
   const unitName = (unitId: string | null) =>
     units.find((item) => item.id === unitId)?.name ??
     "Não definida";
@@ -470,13 +504,11 @@ export default function UserManagementPage({
         setInvitationResult(result);
 
         const emailText =
-          result.email_status === "sent"
-            ? "E-mail personalizado enviado."
-            : result.email_status === "not_configured"
-              ? "Link criado, mas o Resend ainda não está configurado."
-              : result.email_status === "disabled"
-                ? "O envio por e-mail está desativado."
-                : "O e-mail não pôde ser enviado.";
+      result.email_status === "sent"
+        ? "E-mail automático enviado."
+        : result.email_status === "disabled"
+          ? "O envio por e-mail está desativado."
+          : "O convite está pronto para envio pelo seu aplicativo de e-mail.";
 
         setFeedback({
           type:
@@ -522,6 +554,43 @@ export default function UserManagementPage({
     }
   };
 
+  const openEmailClient = () => {
+    if (!manualInviteEmail) {
+      setFeedback({
+        type: "warning",
+        text:
+          "O convite ainda não possui destinatário ou link.",
+      });
+      return;
+    }
+
+    openManualInviteEmail(manualInviteEmail);
+  };
+
+  const shareInvite = async () => {
+    if (!manualInviteEmail) {
+      return;
+    }
+
+    try {
+      const shared = await shareManualInvite(
+        manualInviteEmail,
+      );
+
+      if (!shared) {
+        await copyText(
+          manualInviteEmail.body,
+          "Mensagem do convite copiada.",
+        );
+      }
+    } catch {
+      setFeedback({
+        type: "warning",
+        text:
+          "O compartilhamento foi cancelado ou não está disponível.",
+      });
+    }
+  };
   const openWhatsapp = (url: string) => {
     if (!url) {
       setFeedback({
@@ -575,7 +644,12 @@ export default function UserManagementPage({
       return;
     }
 
-    setInvitationResult(result);
+    setInvitationResult({
+      ...result,
+      recipient_email: invitation.email,
+      recipient_name: invitation.display_name,
+      recipient_role: invitation.role,
+    });
     setFeedback({
       type:
         result.email_status === "failed"
@@ -583,8 +657,8 @@ export default function UserManagementPage({
           : "success",
       text:
         result.email_status === "sent"
-          ? "Convite reenviado por e-mail."
-          : "Novo link criado. Use o WhatsApp ou copie o link.",
+          ? "Convite reenviado automaticamente."
+          : "Novo link criado. Abra o e-mail, o WhatsApp ou copie o link.",
     });
 
     await loadUsers();
@@ -744,6 +818,44 @@ export default function UserManagementPage({
           </div>
 
           <footer>
+            {manualInviteEmail && (
+              <button
+                type="button"
+                className="email"
+                onClick={openEmailClient}
+              >
+                <AppIcon name="mail" size={18} />
+                Abrir e-mail
+              </button>
+            )}
+
+            {manualInviteEmail && (
+              <button
+                type="button"
+                onClick={() =>
+                  void copyText(
+                    manualInviteEmail.body,
+                    "Texto do e-mail copiado.",
+                  )
+                }
+              >
+                <AppIcon name="copy" size={18} />
+                Copiar texto do e-mail
+              </button>
+            )}
+
+            {manualInviteEmail &&
+              typeof navigator !== "undefined" &&
+              "share" in navigator && (
+                <button
+                  type="button"
+                  onClick={() => void shareInvite()}
+                >
+                  <AppIcon name="send" size={18} />
+                  Compartilhar
+                </button>
+              )}
+
             {invitationResult.whatsapp_url && (
               <button
                 type="button"

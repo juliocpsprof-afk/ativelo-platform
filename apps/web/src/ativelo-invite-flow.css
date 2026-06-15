@@ -1,0 +1,231 @@
+.ativelo-channel-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    3,
+    minmax(0, 1fr)
+  );
+  gap: 14px;
+}
+
+.ativelo-channel-grid article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.ativelo-channel-grid article.active {
+  border-color: rgba(22, 163, 74, 0.28);
+  background: #f7fff9;
+}
+
+.ativelo-channel-grid article div {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.ativelo-channel-grid article strong {
+  color: #0f172a;
+  font-size: 0.88rem;
+}
+
+.ativelo-channel-grid article span {
+  color: #64748b;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.ativelo-channel-grid article b {
+  color: #166534;
+  font-size: 0.72rem;
+}
+
+.ativelo-invite-tutorial {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 22px;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.ativelo-communication-card details {
+  margin-top: 12px;
+  padding: 13px 14px;
+  border: 1px solid #dbe3ef;
+  border-radius: 13px;
+  background: #f8fafc;
+}
+
+.ativelo-communication-card summary {
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ativelo-communication-card details p {
+  margin: 10px 0 0;
+  color: #475569;
+  line-height: 1.55;
+}
+
+.ativelo-advanced-provider-note {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.ativelo-invitation-result footer .email {
+  background: #eef4ff;
+  color: #174ea6;
+}
+
+.ativelo-first-access {
+  display: grid;
+  min-height: 100dvh;
+  padding: 24px;
+  place-items: center;
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(25, 113, 245, 0.16),
+      transparent 38%
+    ),
+    #f4f7fb;
+}
+
+.ativelo-first-access__card {
+  width: min(500px, 100%);
+  padding: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
+}
+
+.ativelo-first-access__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.ativelo-first-access__brand img {
+  width: auto;
+  max-width: 150px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.ativelo-first-access__brand span {
+  color: #1d4ed8;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.ativelo-first-access h1 {
+  margin: 26px 0 8px;
+}
+
+.ativelo-first-access p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.ativelo-first-access form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.ativelo-first-access form label {
+  display: grid;
+  gap: 7px;
+}
+
+.ativelo-first-access form label span {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.ativelo-first-access form input {
+  min-height: 48px;
+  padding: 0 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font: inherit;
+}
+
+.ativelo-first-access form input:focus {
+  border-color: #2563eb;
+  outline: 3px solid rgba(37, 99, 235, 0.14);
+}
+
+.ativelo-first-access form button {
+  min-height: 48px;
+}
+
+.ativelo-first-access__feedback {
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.ativelo-first-access__feedback.error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.ativelo-first-access__feedback.success {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.ativelo-first-access__security {
+  display: block;
+  margin-top: 18px;
+  color: #64748b;
+  line-height: 1.45;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .ativelo-channel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .ativelo-first-access {
+    padding: 0;
+  }
+
+  .ativelo-first-access__card {
+    min-height: 100dvh;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .ativelo-channel-grid article {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .ativelo-channel-grid article b {
+    grid-column: 2;
+  }
+}

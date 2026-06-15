@@ -15,6 +15,7 @@ import type { LogisticsTab } from "./pages/LogisticsPage";
 import NetworkInventoryPage from "./pages/NetworkInventoryPage";
 import type { NetworkTab } from "./pages/NetworkInventoryPage";
 import LoginPage from "./pages/LoginPage";
+import InviteFirstAccessPage from "./pages/InviteFirstAccessPage";
 import OrganizationSetupPage from "./pages/OrganizationSetupPage";
 import ScannerPage from "./pages/ScannerPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -195,6 +196,12 @@ function AppContent() {
 
   if (!user) {
     return <LoginPage />;
+  }
+
+  if (
+    user.user_metadata?.must_set_password === true
+  ) {
+    return <InviteFirstAccessPage />;
   }
 
   if (organizationError) {
