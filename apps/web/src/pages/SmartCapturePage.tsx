@@ -3,7 +3,6 @@ import type { ChangeEvent, FormEvent } from "react";
 import type { OrganizationContext } from "../App";
 import AppIcon from "../components/AppIcon";
 import { supabase } from "../lib/supabase";
-import EquipmentSpecResearchModal from "../components/EquipmentSpecResearchModal";
 import {
   emptySmartLabelResult,
   readSmartFactoryLabel,
@@ -424,10 +423,6 @@ export default function SmartCapturePage({
     text: string;
   } | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [
-    isSpecResearchOpen,
-    setIsSpecResearchOpen,
-  ] = useState(false);
 
   const loadCatalogs = useCallback(async () => {
     const organizationId = organization.organizationId;
@@ -1647,32 +1642,6 @@ export default function SmartCapturePage({
               </div>
             </div>
 
-            <div className="ativelo-spec-research-callout">
-              <div>
-                <AppIcon name="search" size={22} />
-                <div>
-                  <strong>
-                    Completar pelo modelo
-                  </strong>
-                  <span>
-                    Pesquise fabricante, ficha técnica,
-                    manual e especificações. Você revisará
-                    cada campo antes de aplicar.
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="secondary"
-                onClick={() =>
-                  setIsSpecResearchOpen(true)
-                }
-              >
-                Pesquisar especificações
-              </button>
-            </div>
-
             <form
               className="ativelo-capture-form"
               onSubmit={saveCapturedAsset}
@@ -2048,85 +2017,7 @@ export default function SmartCapturePage({
             </>
           )}
         </section>
-      )}      {isSpecResearchOpen && (
-        <EquipmentSpecResearchModal
-          initialManufacturer={
-            parsedLabel.manufacturer ||
-            manufacturers.find(
-              (item) =>
-                item.id ===
-                captureForm.manufacturerId,
-            )?.name ||
-            ""
-          }
-          initialModel={
-            parsedLabel.model ||
-            models.find(
-              (item) =>
-                item.id === captureForm.modelId,
-            )?.name ||
-            ""
-          }
-          categoryHint={
-            parsedLabel.categoryHint ||
-            categories.find(
-              (item) =>
-                item.id ===
-                captureForm.categoryId,
-            )?.name ||
-            ""
-          }
-          rawOcrText={parsedLabel.rawText}
-          onClose={() =>
-            setIsSpecResearchOpen(false)
-          }
-          onApply={async (values) => {
-            await Promise.resolve(
-              applyParsedLabel({
-                ...parsedLabel,
-                manufacturer:
-                  values.manufacturer ||
-                  parsedLabel.manufacturer,
-                model:
-                  values.model ||
-                  parsedLabel.model,
-                categoryHint:
-                  values.categoryHint ||
-                  parsedLabel.categoryHint,
-                processor:
-                  values.processor ||
-                  parsedLabel.processor,
-                memory:
-                  values.memory ||
-                  parsedLabel.memory,
-                storage:
-                  values.storage ||
-                  parsedLabel.storage,
-                operatingSystem:
-                  values.operatingSystem ||
-                  parsedLabel.operatingSystem,
-              }),
-            );
-
-            if (values.notesAppend) {
-              setCaptureForm((current) => ({
-                ...current,
-                notes:
-                  `${current.notes.trim()}\n${values.notesAppend.trim()}`
-                    .trim(),
-              }));
-            }
-
-            setFeedback({
-              type: "success",
-              text:
-                "Sugestões aplicadas ao pré-cadastro. Revise os campos e confirme a criação do patrimônio.",
-            });
-
-            setIsSpecResearchOpen(false);
-          }}
-        />
       )}
-
-    </main>  );
+    </main>
+  );
 }
