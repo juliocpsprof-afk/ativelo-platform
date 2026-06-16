@@ -1,0 +1,7 @@
+# Nunca envie este arquivo ao Git.
+SUPABASE_URL=https://SEU-PROJETO.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_SUA_CHAVE
+
+# Pesquisa automatica opcional e desativada por padrao.
+# ENABLE_BRAVE_SEARCH=true
+# BRAVE_SEARCH_API_KEY=BSA_SUA_CHAVE

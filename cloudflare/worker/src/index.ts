@@ -1,4 +1,8 @@
-interface AtiveloEnv {
+import {
+  handleEquipmentSpecsRequest,
+  type EquipmentSpecsEnv,
+} from "./equipmentSpecs";
+interface AtiveloEnv extends EquipmentSpecsEnv {
   APP_ENV?: string;
   ALLOWED_ORIGIN?: string;
   SUPABASE_URL: string;
@@ -66,7 +70,7 @@ function getCorsHeaders(request: Request, env: AtiveloEnv): HeadersInit {
 
   const headers: Record<string, string> = {
     "Access-Control-Allow-Headers": "Authorization, Content-Type, X-Request-Id",
-    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
     "Cache-Control": "no-store",
     "Content-Type": "application/json; charset=utf-8",
@@ -244,7 +248,12 @@ export default {
         message: "API do Ativelo disponivel.",
         status: "online",
         environment: env.APP_ENV ?? "development",
-        endpoints: ["/health", "/auth/me"],
+        endpoints: [
+            "/health",
+            "/auth/me",
+            "/equipment-specs/status",
+            "/equipment-specs/research",
+          ],
       });
     }
 
@@ -282,13 +291,71 @@ export default {
         user: getSafeUser(authentication.user),
       });
     }
+    if (
+      url.pathname.startsWith("/equipment-specs/")
+    ) {
+      const authentication =
+        await authenticateUser(request, env);
+
+      if (!authentication.ok) {
+        return jsonResponse(
+          request,
+          env,
+          {
+            ok: false,
+            error: {
+              code: authentication.code,
+              message:
+                authentication.message,
+            },
+          },
+          authentication.status,
+        );
+      }
+
+      const response =
+        await handleEquipmentSpecsRequest(
+          request,
+          env,
+          authentication.user,
+        );
+
+      const headers = new Headers(
+        response.headers,
+      );
+
+      const corsHeaders = getCorsHeaders(
+        request,
+        env,
+      );
+
+      Object.entries(corsHeaders).forEach(
+        ([name, value]) => {
+          headers.set(
+            name,
+            String(value),
+          );
+        },
+      );
+
+      return new Response(response.body, {
+        status: response.status,
+        headers,
+      });
+    }
 
     return jsonResponse(
+
       request,
+
       env,
+
       {
+
         ok: false,
+
         error: {
+
           code: "route_not_found",
           message: "Rota nao encontrada.",
         },

@@ -1,0 +1,452 @@
+.ativelo-spec-research-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 15px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      135deg,
+      #f7fbff,
+      #eef5ff
+    );
+}
+
+.ativelo-spec-research-callout > div {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+}
+
+.ativelo-spec-research-callout svg {
+  flex: 0 0 auto;
+  color: #1d4ed8;
+}
+
+.ativelo-spec-research-callout div div {
+  display: grid;
+  gap: 3px;
+}
+
+.ativelo-spec-research-callout strong {
+  color: #0f172a;
+}
+
+.ativelo-spec-research-callout span {
+  color: #526178;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.ativelo-spec-research-modal {
+  width: min(1120px, 100%);
+}
+
+.ativelo-spec-research-body {
+  display: grid;
+  max-height: calc(100dvh - 190px);
+  gap: 18px;
+  padding: 22px;
+  overflow: auto;
+}
+
+.ativelo-spec-research-safety {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: 15px;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.ativelo-spec-research-safety div {
+  display: grid;
+  gap: 3px;
+}
+
+.ativelo-spec-research-safety span {
+  color: #3f6250;
+  font-size: 0.75rem;
+}
+
+.ativelo-spec-research-inputs {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+}
+
+.ativelo-spec-research-inputs label {
+  display: grid;
+  min-width: 0;
+  gap: 7px;
+}
+
+.ativelo-spec-research-inputs label > span {
+  display: grid;
+  color: #334155;
+  font-size: 0.74rem;
+  font-weight: 850;
+}
+
+.ativelo-spec-research-inputs label small {
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 0.67rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ativelo-spec-research-inputs input,
+.ativelo-spec-research-inputs textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+}
+
+.ativelo-spec-research-inputs .urls {
+  grid-column: 1 / -1;
+}
+
+.ativelo-spec-research-guided {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  background: #eff6ff;
+}
+
+.ativelo-spec-research-guided > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.ativelo-spec-research-guided strong {
+  color: #1e3a8a;
+}
+
+.ativelo-spec-research-guided span {
+  color: #475569;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.ativelo-spec-research-search-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.ativelo-spec-research-search-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 11px;
+  border: 1px solid #93c5fd;
+  border-radius: 10px;
+  background: #fff;
+  color: #1d4ed8;
+  font-size: 0.73rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.ativelo-spec-research-search-links a:hover {
+  border-color: #2563eb;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1);
+}
+
+.ativelo-spec-research-inputs button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.ativelo-spec-research-feedback {
+  padding: 13px;
+  border-radius: 12px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.ativelo-spec-research-summary {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.ativelo-spec-research-summary div {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.ativelo-spec-research-summary span {
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-spec-research-summary strong {
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+.ativelo-spec-research-fields {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+}
+
+.ativelo-spec-research-fields > header,
+.ativelo-spec-research-fields > article {
+  display: grid;
+  grid-template-columns:
+    70px
+    minmax(150px, .8fr)
+    minmax(220px, 1.6fr)
+    130px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.ativelo-spec-research-fields > header {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ativelo-spec-research-fields > article {
+  border-top: 1px solid #eef2f7;
+  background: #fff;
+}
+
+.ativelo-spec-research-fields > article.empty {
+  opacity: 0.62;
+}
+
+.ativelo-spec-research-fields input {
+  width: 20px;
+  height: 20px;
+  accent-color: #1971f5;
+}
+
+.ativelo-spec-research-fields article > span {
+  overflow-wrap: anywhere;
+  color: #334155;
+  font-size: 0.8rem;
+}
+
+.ativelo-spec-research-fields .confidence {
+  width: max-content;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.ativelo-spec-research-fields .confidence.c4,
+.ativelo-spec-research-fields .confidence.c5 {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.ativelo-spec-research-fields .confidence.c3 {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ativelo-spec-research-resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ativelo-spec-research-resources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #bfdbfe;
+  border-radius: 11px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.ativelo-spec-research-warnings {
+  padding: 14px;
+  border: 1px solid #fde68a;
+  border-radius: 14px;
+  background: #fffbeb;
+  color: #854d0e;
+}
+
+.ativelo-spec-research-warnings ul {
+  margin: 9px 0 0;
+  padding-left: 20px;
+}
+
+.ativelo-spec-research-warnings li {
+  margin-top: 5px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.ativelo-spec-research-sources {
+  display: grid;
+  gap: 12px;
+}
+
+.ativelo-spec-research-sources header span {
+  color: #2563eb;
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.ativelo-spec-research-sources h3 {
+  margin: 3px 0 0;
+}
+
+.ativelo-spec-research-sources > div {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.ativelo-spec-research-sources a {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ativelo-spec-research-sources a:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+}
+
+.ativelo-spec-research-sources a > span {
+  width: max-content;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.62rem;
+  font-weight: 850;
+}
+
+.ativelo-spec-research-sources a strong {
+  overflow-wrap: anywhere;
+  font-size: 0.82rem;
+}
+
+.ativelo-spec-research-sources a small {
+  color: #2563eb;
+}
+
+.ativelo-spec-research-sources a p {
+  display: -webkit-box;
+  margin: 3px 0 0;
+  overflow: hidden;
+  color: #64748b;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.ativelo-spec-research-append {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.ativelo-spec-research-append input {
+  width: 19px;
+  height: 19px;
+  accent-color: #1971f5;
+}
+
+.ativelo-spec-research-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 22px;
+  border-top: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+@media (max-width: 760px) {
+  .ativelo-spec-research-callout {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ativelo-spec-research-callout button {
+    width: 100%;
+  }
+
+  .ativelo-spec-research-inputs,
+  .ativelo-spec-research-summary,
+  .ativelo-spec-research-sources > div {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-spec-research-fields {
+    overflow-x: auto;
+  }
+
+  .ativelo-spec-research-fields > header,
+  .ativelo-spec-research-fields > article {
+    min-width: 720px;
+  }
+
+  .ativelo-spec-research-footer {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-spec-research-footer button {
+    width: 100%;
+  }
+}
