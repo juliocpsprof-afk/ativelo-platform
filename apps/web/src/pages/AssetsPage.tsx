@@ -498,7 +498,10 @@ export default function AssetsPage({
 
             {isLabelBatchOpen && (
         <AssetLabelBatchModal
-          assets={assets}
+
+          organizationId={
+            organization.organizationId
+          }assets={assets}
           categories={categories}
           units={units}
           buildings={buildings}
@@ -520,7 +523,10 @@ export default function AssetsPage({
 
       {isQrOpen && selectedAsset && (
         <AssetQrModal
-          asset={selectedAsset}
+
+          organizationId={
+            organization.organizationId
+          }asset={selectedAsset}
           organizationName={
           organization.tradeName ||
           organization.organizationName

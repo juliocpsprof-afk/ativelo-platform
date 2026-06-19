@@ -15,6 +15,8 @@ type DashboardProps = {
   onOpenNetwork: (tab: "overview" | "agents" | "discovered" | "enrollment") => void;
   onOpenCapture: () => void;
   onOpenAuditReports: (tab: "audits" | "reports") => void;
+
+  onOpenSystemAudit: () => void;
 };
 
 type DashboardCounts = {
@@ -44,6 +46,8 @@ export default function Dashboard({
   onOpenNetwork,
   onOpenCapture,
   onOpenAuditReports,
+
+  onOpenSystemAudit,
 }: DashboardProps) {
   const [counts, setCounts] = useState<DashboardCounts>({
     total: 0,
@@ -158,6 +162,23 @@ export default function Dashboard({
                     <button type="button" onClick={() => onOpenAuditReports("audits")}><span className="ativelo-menu-icon"><AppIcon name="audits" size={24}/></span><strong>Auditorias</strong></button>
           <button type="button" onClick={() => onOpenNetwork("overview")}><span className="ativelo-menu-icon"><AppIcon name="network" size={24}/></span><strong>Rede</strong></button>
           <button type="button" onClick={() => onOpenAuditReports("reports")}><span className="ativelo-menu-icon"><AppIcon name="reports" size={24}/></span><strong>Relatórios</strong></button>
+          {[
+            "owner",
+            "admin",
+            "it_manager",
+            "auditor",
+          ].includes(organization.role) && (
+            <button
+              type="button"
+              onClick={onOpenSystemAudit}
+            >
+              <AppIcon
+                name="history"
+                size={19}
+              />
+              Histórico do sistema
+            </button>
+          )}
           <button type="button" onClick={onOpenSettings}><span className="ativelo-menu-icon"><AppIcon name="settings" size={24}/></span><strong>Configurações</strong></button>
           {["owner", "admin"].includes(organization.role) && (
             <button type="button" onClick={onOpenUsers}><span className="ativelo-menu-icon"><AppIcon name="user" size={24}/></span><strong>Usuários e acessos</strong></button>

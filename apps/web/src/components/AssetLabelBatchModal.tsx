@@ -13,6 +13,8 @@ import {
 import type { AssetRecord } from "../types/assets";
 import { statusLabels } from "../types/assets";
 
+
+import { recordAuditEvents } from "../lib/auditTrail";
 type Option = {
   id: string;
   name: string;
@@ -36,6 +38,7 @@ type RoomOption = Option & {
 
 type Props = {
   assets: AssetRecord[];
+  organizationId: string;
   categories: Option[];
   units: Option[];
   buildings: BuildingOption[];
@@ -62,6 +65,7 @@ function clampCopies(value: number): number {
 
 export default function AssetLabelBatchModal({
   assets,
+  organizationId,
   categories,
   units,
   buildings,
@@ -337,6 +341,41 @@ export default function AssetLabelBatchModal({
         organizationName,
         organizationLogoUrl,
       });
+
+      try {
+        await recordAuditEvents(
+          organizationId,
+          selectedAssets.map(
+            (asset) => ({
+              action:
+                "label_printed",
+              entityType: "assets",
+              entityId: asset.id,
+              entityLabel:
+                asset.asset_number,
+              metadata: {
+                mode: "batch",
+                copies:
+                  clampCopies(
+                    copiesByAsset[
+                      asset.id
+                    ] ?? 1,
+                  ),
+                labelSize,
+                selectedAssets:
+                  selectedAssets.length,
+                totalLabels,
+              },
+            }),
+          ),
+          "asset_label_batch",
+        );
+      } catch (auditError) {
+        console.warn(
+          "As etiquetas foram preparadas, mas os eventos de auditoria não foram registrados.",
+          auditError,
+        );
+      }
     } catch (error) {
       printWindow.close();
       setFeedback(

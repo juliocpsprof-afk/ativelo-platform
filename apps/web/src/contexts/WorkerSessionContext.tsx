@@ -4,13 +4,16 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type PropsWithChildren,
 } from "react";
 
 import {
+  ATIVELO_API_FAILURE_EVENT,
   AtiveloApiError,
   getWorkerAuthenticatedUser,
+  type AtiveloApiFailureDetail,
   type WorkerAuthenticatedUser,
 } from "../lib/ativeloApi";
 import { supabase } from "../lib/supabase";
@@ -20,38 +23,187 @@ export type WorkerSessionStatus =
   | "idle"
   | "checking"
   | "authenticated"
+  | "offline"
   | "unauthorized"
   | "unavailable";
+
+export type WorkerFailureKind =
+  | "offline"
+  | "session"
+  | "timeout"
+  | "worker"
+  | "unknown";
+
+export type WorkerApiNotice = {
+  id: string;
+  operation: string;
+  kind: WorkerFailureKind;
+  title: string;
+  message: string;
+  createdAt: string;
+};
+
+type PendingOperation = {
+  operation: string;
+  error: unknown;
+  createdAt: string;
+};
 
 type WorkerSessionContextValue = {
   status: WorkerSessionStatus;
   workerUser: WorkerAuthenticatedUser | null;
   message: string | null;
   checkedAt: string | null;
+  notice: WorkerApiNotice | null;
   refresh: () => void;
+  dismissNotice: () => void;
 };
 
 const WorkerSessionContext =
-  createContext<WorkerSessionContextValue | null>(null);
+  createContext<WorkerSessionContextValue | null>(
+    null,
+  );
 
-function getErrorMessage(error: unknown): string {
-  if (error instanceof AtiveloApiError) {
-    return error.message;
+const RETRY_DELAYS = [0, 1200, 3200] as const;
+const REQUEST_TIMEOUT_MS = 7000;
+const STALE_AFTER_MS = 5 * 60 * 1000;
+
+function delay(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, milliseconds);
+  });
+}
+
+function classifyFailure(
+  error: unknown,
+): WorkerFailureKind {
+  if (
+    typeof navigator !== "undefined" &&
+    navigator.onLine === false
+  ) {
+    return "offline";
   }
 
-  if (error instanceof DOMException && error.name === "AbortError") {
-    return "A verificação da sessão foi interrompida.";
+  if (
+    error instanceof DOMException &&
+    error.name === "AbortError"
+  ) {
+    return "timeout";
+  }
+
+  if (error instanceof AtiveloApiError) {
+    if (
+      error.status === 401 ||
+      error.status === 403
+    ) {
+      return "session";
+    }
+
+    if (
+      error.status >= 500 ||
+      error.status === 404
+    ) {
+      return "worker";
+    }
   }
 
   if (error instanceof TypeError) {
-    return "A API segura está temporariamente indisponível.";
+    return "worker";
+  }
+
+  return "unknown";
+}
+
+function statusForFailure(
+  kind: WorkerFailureKind,
+): WorkerSessionStatus {
+  if (kind === "offline") {
+    return "offline";
+  }
+
+  if (kind === "session") {
+    return "unauthorized";
+  }
+
+  return "unavailable";
+}
+
+function titleForFailure(
+  kind: WorkerFailureKind,
+): string {
+  if (kind === "offline") {
+    return "Sem conexão com a internet";
+  }
+
+  if (kind === "session") {
+    return "Sua sessão precisa ser renovada";
+  }
+
+  if (kind === "timeout") {
+    return "O serviço demorou para responder";
+  }
+
+  if (kind === "worker") {
+    return "Serviço seguro temporariamente indisponível";
+  }
+
+  return "Não foi possível concluir a operação";
+}
+
+function messageForFailure(
+  kind: WorkerFailureKind,
+  error?: unknown,
+): string {
+  if (kind === "offline") {
+    return "Verifique o Wi-Fi ou os dados móveis. O Ativelo tentará reconectar quando a internet voltar.";
+  }
+
+  if (kind === "session") {
+    return "A sessão expirou ou não pôde ser renovada. Entre novamente caso a próxima tentativa não funcione.";
+  }
+
+  if (kind === "timeout") {
+    return "A conexão está lenta ou o serviço está ocupado. Tente novamente em alguns instantes.";
+  }
+
+  if (kind === "worker") {
+    return "O Cloudflare Worker não respondeu. As funções diretas do Supabase podem continuar disponíveis.";
   }
 
   if (error instanceof Error) {
     return error.message;
   }
 
-  return "Não foi possível confirmar a sessão na API segura.";
+  return "Tente novamente. Se o problema continuar, atualize o aplicativo.";
+}
+
+function passiveMessage(
+  kind: WorkerFailureKind,
+): string {
+  if (kind === "offline") {
+    return "Internet indisponível.";
+  }
+
+  if (kind === "session") {
+    return "Sessão não confirmada.";
+  }
+
+  if (kind === "timeout") {
+    return "A API demorou para responder.";
+  }
+
+  return "A API segura não respondeu.";
+}
+
+function noticeId(): string {
+  if (
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
+  ) {
+    return crypto.randomUUID();
+  }
+
+  return `notice-${Date.now()}`;
 }
 
 export function WorkerSessionProvider({
@@ -61,14 +213,78 @@ export function WorkerSessionProvider({
 
   const [status, setStatus] =
     useState<WorkerSessionStatus>("idle");
+
   const [workerUser, setWorkerUser] =
-    useState<WorkerAuthenticatedUser | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [checkedAt, setCheckedAt] = useState<string | null>(null);
-  const [refreshVersion, setRefreshVersion] = useState(0);
+    useState<WorkerAuthenticatedUser | null>(
+      null,
+    );
+
+  const [message, setMessage] =
+    useState<string | null>(null);
+
+  const [checkedAt, setCheckedAt] =
+    useState<string | null>(null);
+
+  const [notice, setNotice] =
+    useState<WorkerApiNotice | null>(null);
+
+  const [refreshVersion, setRefreshVersion] =
+    useState(0);
+
+  const checkedAtRef =
+    useRef<string | null>(null);
+
+  const pendingOperationRef =
+    useRef<PendingOperation | null>(null);
 
   const refresh = useCallback(() => {
+    setNotice(null);
     setRefreshVersion((current) => current + 1);
+  }, []);
+
+  const dismissNotice = useCallback(() => {
+    setNotice(null);
+    pendingOperationRef.current = null;
+  }, []);
+
+  useEffect(() => {
+    checkedAtRef.current = checkedAt;
+  }, [checkedAt]);
+
+  useEffect(() => {
+    const handleRequiredFailure = (
+      event: Event,
+    ) => {
+      const detail =
+        (
+          event as CustomEvent<
+            AtiveloApiFailureDetail
+          >
+        ).detail;
+
+      pendingOperationRef.current = {
+        operation: detail.operation,
+        error: detail.error,
+        createdAt: detail.occurredAt,
+      };
+
+      setNotice(null);
+      setRefreshVersion(
+        (current) => current + 1,
+      );
+    };
+
+    window.addEventListener(
+      ATIVELO_API_FAILURE_EVENT,
+      handleRequiredFailure,
+    );
+
+    return () => {
+      window.removeEventListener(
+        ATIVELO_API_FAILURE_EVENT,
+        handleRequiredFailure,
+      );
+    };
   }, []);
 
   useEffect(() => {
@@ -79,123 +295,271 @@ export function WorkerSessionProvider({
       setWorkerUser(null);
       setMessage(null);
       setCheckedAt(null);
+      setNotice(null);
+      pendingOperationRef.current = null;
       return;
     }
 
-    const controller = new AbortController();
-    let isMounted = true;
+    let disposed = false;
+    let activeController:
+      | AbortController
+      | null = null;
+
+    const requestUser = async (
+      token: string,
+    ): Promise<WorkerAuthenticatedUser> => {
+      activeController =
+        new AbortController();
+
+      const timeout =
+        window.setTimeout(
+          () => activeController?.abort(),
+          REQUEST_TIMEOUT_MS,
+        );
+
+      try {
+        return await getWorkerAuthenticatedUser(
+          token,
+          activeController.signal,
+        );
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    };
 
     const validateSession = async () => {
       setStatus("checking");
       setMessage(null);
 
-      try {
-        let currentAccessToken = accessToken;
-        let authenticatedUser: WorkerAuthenticatedUser;
+      let currentToken = accessToken;
+      let sessionRefreshed = false;
+      let lastError: unknown =
+        new Error("A API segura não respondeu.");
+
+      for (
+        let attempt = 0;
+        attempt < RETRY_DELAYS.length;
+        attempt += 1
+      ) {
+        const wait = RETRY_DELAYS[attempt];
+
+        if (wait > 0) {
+          await delay(wait);
+        }
+
+        if (disposed) {
+          return;
+        }
 
         try {
-          authenticatedUser =
-            await getWorkerAuthenticatedUser(
-              currentAccessToken,
-              controller.signal,
-            );
+          const user =
+            await requestUser(currentToken);
+
+          if (disposed) {
+            return;
+          }
+
+          setWorkerUser(user);
+          setStatus("authenticated");
+          setMessage(null);
+
+          const now =
+            new Date().toISOString();
+
+          setCheckedAt(now);
+          pendingOperationRef.current = null;
+          setNotice(null);
+          return;
         } catch (error) {
-          if (
-            !(error instanceof AtiveloApiError) ||
-            error.status !== 401
-          ) {
-            throw error;
-          }
-
-          const {
-            data: refreshedData,
-            error: refreshError,
-          } = await supabase.auth.refreshSession();
+          lastError = error;
 
           if (
-            refreshError ||
-            !refreshedData.session?.access_token
+            error instanceof AtiveloApiError &&
+            error.status === 401 &&
+            !sessionRefreshed
           ) {
-            throw new AtiveloApiError(
-              401,
-              "session_refresh_failed",
-              "Sua sessão não pôde ser renovada. Entre novamente.",
-            );
+            const {
+              data,
+              error: refreshError,
+            } =
+              await supabase.auth
+                .refreshSession();
+
+            if (
+              !refreshError &&
+              data.session?.access_token
+            ) {
+              currentToken =
+                data.session.access_token;
+
+              sessionRefreshed = true;
+              continue;
+            }
+
+            lastError =
+              new AtiveloApiError(
+                401,
+                "session_refresh_failed",
+                "Sua sessão não pôde ser renovada.",
+              );
+
+            break;
           }
 
-          currentAccessToken =
-            refreshedData.session.access_token;
-
-          authenticatedUser =
-            await getWorkerAuthenticatedUser(
-              currentAccessToken,
-              controller.signal,
-            );
+          if (
+            classifyFailure(error) ===
+              "session"
+          ) {
+            break;
+          }
         }
+      }
 
-        if (!isMounted || controller.signal.aborted) {
-          return;
-        }
+      if (disposed) {
+        return;
+      }
 
-        setWorkerUser(authenticatedUser);
-        setStatus("authenticated");
-        setMessage("Sessão confirmada pela API segura.");
-        setCheckedAt(new Date().toISOString());
-      } catch (error) {
-        if (!isMounted || controller.signal.aborted) {
-          return;
-        }
+      const kind =
+        classifyFailure(lastError);
 
-        setWorkerUser(null);
-        setCheckedAt(new Date().toISOString());
-        setMessage(getErrorMessage(error));
+      const now =
+        new Date().toISOString();
 
-        if (
-          error instanceof AtiveloApiError &&
-          error.status === 401
-        ) {
-          setStatus("unauthorized");
-          return;
-        }
+      setWorkerUser(null);
+      setCheckedAt(now);
+      setStatus(statusForFailure(kind));
+      setMessage(passiveMessage(kind));
 
-        setStatus("unavailable");
+      const pending =
+        pendingOperationRef.current;
+
+      if (pending) {
+        setNotice({
+          id: noticeId(),
+          operation: pending.operation,
+          kind,
+          title: titleForFailure(kind),
+          message: messageForFailure(
+            kind,
+            pending.error,
+          ),
+          createdAt: pending.createdAt,
+        });
       }
     };
 
     void validateSession();
 
     return () => {
-      isMounted = false;
-      controller.abort();
+      disposed = true;
+      activeController?.abort();
     };
-  }, [refreshVersion, session?.access_token]);
+  }, [
+    refreshVersion,
+    session?.access_token,
+  ]);
 
-  const value = useMemo<WorkerSessionContextValue>(
-    () => ({
-      status,
-      workerUser,
-      message,
-      checkedAt,
-      refresh,
-    }),
-    [
-      checkedAt,
-      message,
-      refresh,
-      status,
-      workerUser,
-    ],
-  );
+  useEffect(() => {
+    if (!session?.access_token) {
+      return;
+    }
+
+    const reconnect = () => {
+      setRefreshVersion(
+        (current) => current + 1,
+      );
+    };
+
+    const handleVisible = () => {
+      if (
+        document.visibilityState !==
+          "visible"
+      ) {
+        return;
+      }
+
+      const lastCheck =
+        checkedAtRef.current
+          ? new Date(
+              checkedAtRef.current,
+            ).getTime()
+          : 0;
+
+      if (
+        Date.now() - lastCheck >
+        STALE_AFTER_MS
+      ) {
+        reconnect();
+      }
+    };
+
+    window.addEventListener(
+      "online",
+      reconnect,
+    );
+
+    window.addEventListener(
+      "focus",
+      handleVisible,
+    );
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisible,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "online",
+        reconnect,
+      );
+
+      window.removeEventListener(
+        "focus",
+        handleVisible,
+      );
+
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisible,
+      );
+    };
+  }, [session?.access_token]);
+
+  const value =
+    useMemo<WorkerSessionContextValue>(
+      () => ({
+        status,
+        workerUser,
+        message,
+        checkedAt,
+        notice,
+        refresh,
+        dismissNotice,
+      }),
+      [
+        checkedAt,
+        dismissNotice,
+        message,
+        notice,
+        refresh,
+        status,
+        workerUser,
+      ],
+    );
 
   return (
-    <WorkerSessionContext.Provider value={value}>
+    <WorkerSessionContext.Provider
+      value={value}
+    >
       {children}
     </WorkerSessionContext.Provider>
   );
 }
 
 export function useWorkerSession() {
-  const context = useContext(WorkerSessionContext);
+  const context =
+    useContext(WorkerSessionContext);
 
   if (!context) {
     throw new Error(

@@ -25,6 +25,8 @@ import SmartCapturePage from "./pages/SmartCapturePage";
 import SupportMaintenancePage from "./pages/SupportMaintenancePage";
 import type { SupportTab } from "./pages/SupportMaintenancePage";
 
+
+import SystemAuditPage from "./pages/SystemAuditPage";
 export type OrganizationContext = {
   organizationId: string;
   organizationName: string;
@@ -46,7 +48,8 @@ type AuthenticatedView =
   | "network"
   | "capture"
   | "auditReports"
-  | "users";
+  | "users"
+  | "systemAudit";
 
 function AppContent() {
   const { user, isLoading } = useAuth();
@@ -245,7 +248,25 @@ function AppContent() {
     );
   }
 
-  if (view === "settings") {
+    if (
+    view === "systemAudit" &&
+    [
+      "owner",
+      "admin",
+      "it_manager",
+      "auditor",
+    ].includes(organization.role)
+  ) {
+    return (
+      <SystemAuditPage
+        organization={organization}
+        onBack={() =>
+          setView("dashboard")
+        }
+      />
+    );
+  }
+if (view === "settings") {
     return (
       <SettingsPage
         organization={organization}
@@ -343,7 +364,10 @@ function AppContent() {
       onOpenNetwork={openNetwork}
       onOpenCapture={openCapture}
       onOpenAuditReports={openAuditReports}
-    />
+        onOpenSystemAudit={() =>
+          setView("systemAudit")
+        }
+      />
   );
 }
 

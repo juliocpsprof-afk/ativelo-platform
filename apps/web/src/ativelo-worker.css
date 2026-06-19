@@ -1,170 +1,217 @@
-.ativelo-worker-status {
+.ativelo-api-indicator {
   position: fixed;
-  top: max(14px, env(safe-area-inset-top));
-  right: max(14px, env(safe-area-inset-right));
-  z-index: 2200;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 10px;
-  width: min(380px, calc(100vw - 28px));
-  padding: 11px 11px 11px 13px;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow:
-    0 18px 44px rgba(15, 23, 42, 0.16),
-    0 2px 8px rgba(15, 23, 42, 0.08);
-  color: #0f172a;
-  backdrop-filter: blur(16px);
+  right:
+    max(
+      14px,
+      env(safe-area-inset-right)
+    );
+  bottom:
+    max(
+      14px,
+      env(safe-area-inset-bottom)
+    );
+  z-index: 1250;
   pointer-events: none;
 }
 
-.ativelo-worker-status__signal {
-  width: 10px;
-  height: 10px;
+.ativelo-api-indicator__dot {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  padding: 0;
+  place-items: center;
+  border: 1px solid
+    rgba(220, 38, 38, 0.24);
   border-radius: 999px;
-  background: #64748b;
-  box-shadow: 0 0 0 5px rgba(100, 116, 139, 0.12);
+  background:
+    rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 8px 24px
+      rgba(15, 23, 42, 0.13);
+  color: #dc2626;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
 }
 
-.ativelo-worker-status__content {
+.ativelo-api-indicator__dot svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ativelo-api-indicator--offline
+  .ativelo-api-indicator__dot {
+  border-color:
+    rgba(217, 119, 6, 0.26);
+  color: #d97706;
+}
+
+.ativelo-api-indicator--session
+  .ativelo-api-indicator__dot {
+  border-color:
+    rgba(124, 58, 237, 0.25);
+  color: #7c3aed;
+}
+
+.ativelo-api-indicator--timeout
+  .ativelo-api-indicator__dot {
+  border-color:
+    rgba(37, 99, 235, 0.25);
+  color: #2563eb;
+}
+
+.ativelo-api-indicator__panel {
+  display: grid;
+  width:
+    min(
+      330px,
+      calc(100vw - 28px)
+    );
+  margin-bottom: 9px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  background:
+    rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 18px 48px
+      rgba(15, 23, 42, 0.18);
+  color: #0f172a;
+  pointer-events: auto;
+  backdrop-filter: blur(18px);
+  animation:
+    ativelo-api-panel-in
+    160ms ease-out;
+}
+
+.ativelo-api-indicator__panel header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 13px 8px;
+}
+
+.ativelo-api-indicator__panel header > div {
   display: grid;
   min-width: 0;
-  gap: 2px;
+  gap: 3px;
 }
 
-.ativelo-worker-status__content strong {
+.ativelo-api-indicator__panel header span {
   overflow: hidden;
-  color: inherit;
-  font-size: 0.82rem;
+  color: #64748b;
+  font-size: 0.64rem;
   font-weight: 850;
-  line-height: 1.25;
+  letter-spacing: 0.04em;
   text-overflow: ellipsis;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
-.ativelo-worker-status__content span {
-  color: #475569;
-  font-size: 0.72rem;
-  line-height: 1.35;
-}
-
-.ativelo-worker-status__content small {
-  color: #64748b;
-  font-size: 0.65rem;
+.ativelo-api-indicator__panel header strong {
+  color: #0f172a;
+  font-size: 0.86rem;
   line-height: 1.3;
 }
 
-.ativelo-worker-status button {
-  pointer-events: auto;
-  font: inherit;
+.ativelo-api-indicator__close {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 1.1rem;
+  line-height: 1;
   cursor: pointer;
 }
 
-.ativelo-worker-status__retry {
-  min-height: 36px;
+.ativelo-api-indicator__panel p {
+  margin: 0;
+  padding: 0 13px;
+  color: #475569;
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.ativelo-api-indicator__panel small {
+  padding: 8px 13px 0;
+  color: #94a3b8;
+  font-size: 0.65rem;
+}
+
+.ativelo-api-indicator__panel footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 11px 13px 13px;
+}
+
+.ativelo-api-indicator__retry {
+  min-height: 34px;
   padding: 7px 10px;
-  border: 1px solid rgba(30, 64, 175, 0.22);
-  border-radius: 10px;
+  border: 1px solid
+    rgba(37, 99, 235, 0.2);
+  border-radius: 9px;
   background: #eff6ff;
   color: #1d4ed8;
+  font: inherit;
   font-size: 0.7rem;
   font-weight: 850;
+  cursor: pointer;
 }
 
-.ativelo-worker-status__close {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  place-items: center;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: #64748b;
-  font-size: 1.25rem;
-  line-height: 1;
+.ativelo-api-indicator__retry:hover {
+  background: #dbeafe;
 }
 
-.ativelo-worker-status__close:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-}
-
-.ativelo-worker-status--checking
-  .ativelo-worker-status__signal {
-  background: #2563eb;
-  box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.14);
-  animation: ativelo-worker-pulse 1.2s ease-in-out infinite;
-}
-
-.ativelo-worker-status--authenticated
-  .ativelo-worker-status__signal {
-  background: #16a34a;
-  box-shadow: 0 0 0 5px rgba(22, 163, 74, 0.14);
-}
-
-.ativelo-worker-status--warning {
-  border-color: rgba(217, 119, 6, 0.3);
-}
-
-.ativelo-worker-status--warning
-  .ativelo-worker-status__signal {
-  background: #d97706;
-  box-shadow: 0 0 0 5px rgba(217, 119, 6, 0.14);
-}
-
-.ativelo-worker-status--unavailable {
-  border-color: rgba(220, 38, 38, 0.28);
-}
-
-.ativelo-worker-status--unavailable
-  .ativelo-worker-status__signal {
-  background: #dc2626;
-  box-shadow: 0 0 0 5px rgba(220, 38, 38, 0.12);
-}
-
-@keyframes ativelo-worker-pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(0.88);
+@keyframes ativelo-api-panel-in {
+  from {
+    opacity: 0;
+    transform:
+      translateY(6px)
+      scale(0.98);
   }
 
-  50% {
+  to {
     opacity: 1;
-    transform: scale(1);
+    transform:
+      translateY(0)
+      scale(1);
   }
 }
 
 @media (max-width: 720px) {
-  .ativelo-worker-status {
-    top: max(8px, env(safe-area-inset-top));
-    right: 8px;
-    width: calc(100vw - 16px);
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    padding: 10px;
+  .ativelo-api-indicator {
+    right: 10px;
+    bottom:
+      calc(
+        74px +
+        env(safe-area-inset-bottom)
+      );
   }
 
-  .ativelo-worker-status__retry {
-    grid-column: 2 / 4;
-    width: 100%;
+  .ativelo-api-indicator__dot {
+    width: 34px;
+    height: 34px;
   }
 
-  .ativelo-worker-status__close {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
-  .ativelo-worker-status__content strong {
-    white-space: normal;
+  .ativelo-api-indicator__panel {
+    width:
+      min(
+        310px,
+        calc(100vw - 20px)
+      );
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ativelo-worker-status--checking
-    .ativelo-worker-status__signal {
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .ativelo-api-indicator__panel {
     animation: none;
   }
 }

@@ -21,6 +21,8 @@ import "./pwa/registerServiceWorker";
 import "./ativelo-mobile-stability.css";
 import "./ativelo-invite-flow.css";
 import "./ativelo-label-workflow.css";
+
+import "./ativelo-system-audit.css";
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {

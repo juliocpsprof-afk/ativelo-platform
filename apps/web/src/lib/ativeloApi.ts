@@ -2,10 +2,12 @@ const DEFAULT_ATIVELO_API_URL =
   "https://ativelo-api.ativeloapp.workers.dev";
 
 const configuredApiUrl =
-  import.meta.env.VITE_ATIVELO_API_URL?.trim();
+  import.meta.env
+    .VITE_ATIVELO_API_URL?.trim();
 
 export const ativeloApiUrl = (
-  configuredApiUrl || DEFAULT_ATIVELO_API_URL
+  configuredApiUrl ||
+  DEFAULT_ATIVELO_API_URL
 ).replace(/\/+$/, "");
 
 export type WorkerAuthenticatedUser = {
@@ -32,6 +34,21 @@ type AuthenticatedUserResponse = {
   ok: true;
   user: WorkerAuthenticatedUser;
 };
+
+export type AtiveloApiFailureDetail = {
+  operation: string;
+  path: string;
+  error: unknown;
+  occurredAt: string;
+};
+
+export type AtiveloApiRequestOptions = {
+  operation?: string;
+  silent?: boolean;
+};
+
+export const ATIVELO_API_FAILURE_EVENT =
+  "ativelo:api-required-failure";
 
 export class AtiveloApiError extends Error {
   readonly status: number;
@@ -79,42 +96,101 @@ async function parseResponseBody(
   }
 }
 
+function isAbortError(error: unknown): boolean {
+  return (
+    error instanceof DOMException &&
+    error.name === "AbortError"
+  );
+}
+
+export function notifyAtiveloApiRequiredFailure(
+  detail: AtiveloApiFailureDetail,
+): void {
+  if (
+    typeof window === "undefined" ||
+    isAbortError(detail.error)
+  ) {
+    return;
+  }
+
+  window.dispatchEvent(
+    new CustomEvent<AtiveloApiFailureDetail>(
+      ATIVELO_API_FAILURE_EVENT,
+      { detail },
+    ),
+  );
+}
+
 export async function requestAtiveloApi<T>(
   path: string,
   accessToken: string,
   signal?: AbortSignal,
+  options: AtiveloApiRequestOptions = {},
 ): Promise<T> {
-  const normalizedPath = path.startsWith("/")
-    ? path
-    : `/${path}`;
+  const normalizedPath =
+    path.startsWith("/") ? path : `/${path}`;
 
-  const response = await fetch(
-    `${ativeloApiUrl}${normalizedPath}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`,
-        "X-Request-Id": createRequestId(),
+  const operation =
+    options.operation ??
+    "Conectar ao serviço seguro";
+
+  let response: Response;
+
+  try {
+    response = await fetch(
+      `${ativeloApiUrl}${normalizedPath}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization:
+            `Bearer ${accessToken}`,
+          "X-Request-Id": createRequestId(),
+        },
+        cache: "no-store",
+        credentials: "omit",
+        referrerPolicy: "no-referrer",
+        signal,
       },
-      cache: "no-store",
-      credentials: "omit",
-      referrerPolicy: "no-referrer",
-      signal,
-    },
-  );
+    );
+  } catch (error) {
+    if (!options.silent) {
+      notifyAtiveloApiRequiredFailure({
+        operation,
+        path: normalizedPath,
+        error,
+        occurredAt: new Date().toISOString(),
+      });
+    }
+
+    throw error;
+  }
 
   const body = await parseResponseBody(response);
 
   if (!response.ok) {
-    const errorBody = body as ApiErrorBody | null;
+    const errorBody =
+      body as ApiErrorBody | null;
 
-    throw new AtiveloApiError(
-      response.status,
-      errorBody?.error?.code ?? "api_request_failed",
-      errorBody?.error?.message ??
-        "A API segura do Ativelo não respondeu como esperado.",
-    );
+    const error =
+      new AtiveloApiError(
+        response.status,
+        errorBody?.error?.code ??
+          "api_request_failed",
+        errorBody?.error?.message ??
+          "A API segura do Ativelo não respondeu como esperado.",
+      );
+
+    if (!options.silent) {
+      notifyAtiveloApiRequiredFailure({
+        operation,
+        path: normalizedPath,
+        error,
+        occurredAt: new Date().toISOString(),
+      });
+    }
+
+    throw error;
   }
 
   return body as T;
@@ -129,6 +205,10 @@ export async function getWorkerAuthenticatedUser(
       "/auth/me",
       accessToken,
       signal,
+      {
+        operation: "Validar a sessão",
+        silent: true,
+      },
     );
 
   return response.user;

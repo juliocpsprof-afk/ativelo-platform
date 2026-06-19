@@ -12,8 +12,11 @@ import {
 } from "../lib/assetLabelPrinting";
 import type { AssetRecord } from "../types/assets";
 
+
+import { recordAuditEvents } from "../lib/auditTrail";
 type Props = {
   asset: AssetRecord;
+  organizationId: string;
   organizationName: string;
   organizationLogoUrl?: string | null;
   onClose: () => void;
@@ -21,6 +24,7 @@ type Props = {
 
 export default function AssetQrModal({
   asset,
+  organizationId,
   organizationName,
   organizationLogoUrl = null,
   onClose,
@@ -104,6 +108,32 @@ export default function AssetQrModal({
         organizationName,
         organizationLogoUrl,
       });
+
+      try {
+        await recordAuditEvents(
+          organizationId,
+          [
+            {
+              action: "label_printed",
+              entityType: "assets",
+              entityId: asset.id,
+              entityLabel:
+                asset.asset_number,
+              metadata: {
+                mode: "individual",
+                copies,
+                labelSize,
+              },
+            },
+          ],
+          "asset_label_modal",
+        );
+      } catch (auditError) {
+        console.warn(
+          "A etiqueta foi preparada, mas o evento de auditoria não foi registrado.",
+          auditError,
+        );
+      }
     } catch (error) {
       printWindow.close();
       setErrorMessage(

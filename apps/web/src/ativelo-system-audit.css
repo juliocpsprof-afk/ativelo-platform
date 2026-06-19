@@ -1,0 +1,386 @@
+.ativelo-system-audit-page {
+  min-height: 100dvh;
+  padding: 28px;
+  background: #f4f7fb;
+}
+
+.ativelo-system-audit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.ativelo-system-audit-feedback {
+  margin-top: 18px;
+  padding: 13px 15px;
+  border: 1px solid #fecaca;
+  border-radius: 13px;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.ativelo-system-audit-summary {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 22px;
+}
+
+.ativelo-system-audit-summary article {
+  display: grid;
+  gap: 7px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.ativelo-system-audit-summary span {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ativelo-system-audit-summary strong {
+  color: #0f172a;
+  font-size: 1.8rem;
+}
+
+.ativelo-system-audit-filters {
+  display: grid;
+  grid-template-columns:
+    minmax(240px, 1.7fr)
+    repeat(3, minmax(150px, .7fr));
+  gap: 11px;
+  margin-top: 16px;
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.ativelo-system-audit-filters label {
+  display: grid;
+  gap: 6px;
+}
+
+.ativelo-system-audit-filters label > span {
+  color: #475569;
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.ativelo-system-audit-filters input,
+.ativelo-system-audit-filters select {
+  width: 100%;
+  min-height: 43px;
+  padding: 0 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+}
+
+.ativelo-system-audit-panel {
+  margin-top: 16px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 17px;
+  background: #fff;
+}
+
+.ativelo-system-audit-panel > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px 19px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ativelo-system-audit-panel > header span {
+  color: #2563eb;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.ativelo-system-audit-panel > header h2 {
+  margin: 4px 0 0;
+}
+
+.ativelo-system-audit-panel > header > strong {
+  display: grid;
+  min-width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.ativelo-system-audit-table-wrap {
+  overflow: auto;
+}
+
+.ativelo-system-audit-table {
+  width: 100%;
+  min-width: 1040px;
+  border-collapse: collapse;
+}
+
+.ativelo-system-audit-table th,
+.ativelo-system-audit-table td {
+  padding: 13px 15px;
+  border-bottom: 1px solid #eef2f7;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.ativelo-system-audit-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: .66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ativelo-system-audit-table td {
+  color: #334155;
+  font-size: .76rem;
+}
+
+.ativelo-system-audit-table td strong,
+.ativelo-system-audit-table td small {
+  display: block;
+}
+
+.ativelo-system-audit-table td small {
+  margin-top: 3px;
+  color: #64748b;
+}
+
+.ativelo-system-audit-table .action {
+  display: inline-flex;
+  width: max-content;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: .66rem;
+  font-weight: 850;
+}
+
+.ativelo-system-audit-table
+  .action.deleted {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.ativelo-system-audit-table
+  .action.label_printed,
+.ativelo-system-audit-table
+  .action.label_reprinted {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.ativelo-system-audit-table
+  .action.asset_location_changed,
+.ativelo-system-audit-table
+  .action.asset_responsible_changed,
+.ativelo-system-audit-table
+  .action.asset_location_and_responsible_changed {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ativelo-system-audit-table td:last-child {
+  width: 55px;
+}
+
+.ativelo-system-audit-table td:last-child button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.ativelo-system-audit-empty,
+.ativelo-system-audit-denied {
+  padding: 52px 20px;
+  color: #64748b;
+  text-align: center;
+}
+
+.ativelo-system-audit-denied {
+  display: grid;
+  max-width: 520px;
+  gap: 9px;
+  margin: 42px auto 0;
+  border: 1px solid #fecaca;
+  border-radius: 17px;
+  background: #fff;
+  color: #991b1b;
+}
+
+.ativelo-system-audit-modal {
+  width: min(1120px, 100%);
+}
+
+.ativelo-system-audit-modal-body {
+  display: grid;
+  max-height: calc(100dvh - 150px);
+  gap: 18px;
+  padding: 22px;
+  overflow: auto;
+}
+
+.ativelo-system-audit-identity {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.ativelo-system-audit-identity div {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+  padding: 13px;
+  border: 1px solid #e2e8f0;
+  border-radius: 13px;
+  background: #f8fafc;
+}
+
+.ativelo-system-audit-identity span {
+  color: #64748b;
+  font-size: .65rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.ativelo-system-audit-identity strong {
+  overflow-wrap: anywhere;
+  color: #0f172a;
+  font-size: .78rem;
+}
+
+.ativelo-system-audit-changes {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+}
+
+.ativelo-system-audit-changes > header,
+.ativelo-system-audit-changes > article {
+  display: grid;
+  grid-template-columns:
+    minmax(150px, .7fr)
+    minmax(220px, 1fr)
+    minmax(220px, 1fr);
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.ativelo-system-audit-changes > header {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: .66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ativelo-system-audit-changes > article {
+  border-top: 1px solid #eef2f7;
+}
+
+.ativelo-system-audit-changes pre,
+.ativelo-system-audit-payload pre {
+  margin: 0;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+  font-size: .7rem;
+}
+
+.ativelo-system-audit-payload {
+  display: grid;
+  gap: 9px;
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.ativelo-system-audit-payload h3 {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .ativelo-system-audit-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .ativelo-system-audit-filters {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .ativelo-system-audit-filters .search {
+    grid-column: 1 / -1;
+  }
+
+  .ativelo-system-audit-identity {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .ativelo-system-audit-page {
+    padding: 16px;
+  }
+
+  .ativelo-system-audit-summary,
+  .ativelo-system-audit-filters,
+  .ativelo-system-audit-identity {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-system-audit-filters .search {
+    grid-column: auto;
+  }
+
+  .ativelo-system-audit-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-system-audit-actions button {
+    width: 100%;
+  }
+
+  .ativelo-system-audit-changes {
+    overflow-x: auto;
+  }
+
+  .ativelo-system-audit-changes > header,
+  .ativelo-system-audit-changes > article {
+    min-width: 760px;
+  }
+}
