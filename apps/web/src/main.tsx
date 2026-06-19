@@ -24,6 +24,7 @@ import "./ativelo-label-workflow.css";
 
 import "./ativelo-system-audit.css";
 import "./ativelo-agent-infrastructure.css";
+import "./ativelo-push-notifications.css";
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {

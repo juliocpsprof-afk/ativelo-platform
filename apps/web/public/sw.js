@@ -188,3 +188,117 @@ self.addEventListener("message", (event) => {
     );
   }
 });
+/* ATIVELO_WEB_PUSH_V1 */
+self.addEventListener("push", (event) => {
+  if (!event.data) {
+    return;
+  }
+
+  let payload = {};
+
+  try {
+    payload = event.data.json();
+  } catch {
+    payload = {
+      title: "Ativelo",
+      body: event.data.text(),
+    };
+  }
+
+  const title =
+    payload.title || "Ativelo";
+
+  const options = {
+    body: payload.body || "",
+    icon:
+      payload.icon ||
+      "/icons/ativelo-192.png",
+    badge:
+      payload.badge ||
+      "/icons/ativelo-32.png",
+    tag:
+      payload.tag ||
+      "ativelo-notification",
+    renotify: false,
+    requireInteraction:
+      Boolean(
+        payload.requireInteraction,
+      ),
+    data: {
+      url:
+        payload.url || "/",
+      notificationId:
+        payload.data
+          ?.notificationId ||
+        null,
+      category:
+        payload.data?.category ||
+        null,
+      entityType:
+        payload.data
+          ?.entityType ||
+        null,
+      entityId:
+        payload.data?.entityId ||
+        null,
+    },
+  };
+
+  event.waitUntil(
+    self.registration
+      .showNotification(
+        title,
+        options,
+      ),
+  );
+});
+
+self.addEventListener(
+  "notificationclick",
+  (event) => {
+    event.notification.close();
+
+    const destination =
+      event.notification.data?.url ||
+      "/";
+
+    event.waitUntil(
+      self.clients
+        .matchAll({
+          type: "window",
+          includeUncontrolled: true,
+        })
+        .then((clients) => {
+          for (const client of clients) {
+            if (
+              "focus" in client
+            ) {
+              client.postMessage({
+                type:
+                  "ATIVELO_PUSH_OPENED",
+                notificationId:
+                  event.notification.data
+                    ?.notificationId ||
+                  null,
+                category:
+                  event.notification.data
+                    ?.category ||
+                  null,
+              });
+
+              client.navigate(
+                destination,
+              );
+
+              return client.focus();
+            }
+          }
+
+          return self.clients
+            .openWindow(
+              destination,
+            );
+        }),
+    );
+  },
+);

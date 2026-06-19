@@ -16,6 +16,7 @@ import {
 } from "../lib/manualInviteEmail";
 import { supabase } from "../lib/supabase";
 
+import PushNotificationPanel from "./PushNotificationPanel";
 type Props = {
   organization: OrganizationContext;
 };
@@ -643,7 +644,10 @@ export default function CommunicationSettingsPanel({
         )}
       </section>
 
-      <footer className="ativelo-communication-actions">
+            <PushNotificationPanel
+        organization={organization}
+      />
+<footer className="ativelo-communication-actions">
         <button
           type="submit"
           className="primary"

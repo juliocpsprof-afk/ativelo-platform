@@ -1,5 +1,6 @@
 import { handleAgentControlRequest } from "./agentControl";
 
+import { dispatchPushNotifications } from "./pushScheduler";
 interface AtiveloEnv {
   APP_ENV?: string;
   ALLOWED_ORIGIN?: string;
@@ -846,7 +847,13 @@ if (
     context:
       AtiveloExecutionContext,
   ): Promise<void> {
-    context.waitUntil(
+        context.waitUntil(
+      dispatchPushNotifications(
+        env,
+        controller,
+      ),
+    );
+context.waitUntil(
       Promise.resolve().then(() => {
         console.log(
           JSON.stringify({
