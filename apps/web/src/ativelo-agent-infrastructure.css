@@ -1,0 +1,388 @@
+.ativelo-agent-page {
+  min-height: 100dvh;
+  padding: 28px;
+  background: #f4f7fb;
+}
+
+.ativelo-agent-feedback {
+  margin-top: 16px;
+  padding: 13px 15px;
+  border: 1px solid;
+  border-radius: 13px;
+  font-size: .75rem;
+}
+
+.ativelo-agent-feedback.success {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.ativelo-agent-feedback.error {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.ativelo-agent-summary {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 20px;
+}
+
+.ativelo-agent-summary article,
+.ativelo-agent-cards article,
+.ativelo-agent-panel {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.ativelo-agent-summary article {
+  display: grid;
+  gap: 6px;
+  padding: 17px;
+}
+
+.ativelo-agent-summary span {
+  color: #64748b;
+  font-size: .67rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.ativelo-agent-summary strong {
+  color: #0f172a;
+  font-size: 1.7rem;
+}
+
+.ativelo-agent-tabs {
+  display: flex;
+  gap: 7px;
+  margin-top: 15px;
+  overflow-x: auto;
+  padding: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.ativelo-agent-tabs button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #64748b;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.ativelo-agent-tabs button.active {
+  background: #123c7a;
+  color: #fff;
+}
+
+.ativelo-agent-cards {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.ativelo-agent-cards article {
+  display: grid;
+  gap: 10px;
+  padding: 19px;
+  color: #1d4ed8;
+}
+
+.ativelo-agent-cards h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.ativelo-agent-cards p {
+  margin: 0;
+  color: #64748b;
+  font-size: .75rem;
+  line-height: 1.55;
+}
+
+.ativelo-agent-panel {
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.ativelo-agent-panel > header {
+  padding: 17px 19px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ativelo-agent-panel > header span {
+  color: #2563eb;
+  font-size: .64rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.ativelo-agent-panel > header h2 {
+  margin: 4px 0 0;
+  color: #0f172a;
+}
+
+.ativelo-agent-list {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  padding: 16px;
+}
+
+.ativelo-agent-list > article {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 13px;
+  background: #f8fafc;
+}
+
+.ativelo-agent-list article > div {
+  display: grid;
+  gap: 3px;
+}
+
+.ativelo-agent-list strong {
+  color: #0f172a;
+}
+
+.ativelo-agent-list span,
+.ativelo-agent-list dt,
+.ativelo-agent-list dd {
+  color: #64748b;
+  font-size: .69rem;
+}
+
+.ativelo-agent-list dl {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+}
+
+.ativelo-agent-list dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ativelo-agent-list dd {
+  margin: 0;
+  color: #0f172a;
+  font-weight: 800;
+  text-align: right;
+}
+
+.ativelo-agent-list footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.ativelo-agent-list footer button {
+  min-height: 35px;
+  padding: 7px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ativelo-agent-list footer button.danger {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ativelo-agent-error {
+  margin: 0;
+  padding: 9px;
+  border-radius: 9px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: .69rem;
+}
+
+.ativelo-agent-form {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 17px;
+}
+
+.ativelo-agent-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.ativelo-agent-form label.wide {
+  grid-column: 1 / -1;
+}
+
+.ativelo-agent-form span {
+  color: #475569;
+  font-size: .69rem;
+  font-weight: 850;
+}
+
+.ativelo-agent-form input,
+.ativelo-agent-form textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.ativelo-agent-form textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.ativelo-agent-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+  padding: 0 17px 17px;
+}
+
+.ativelo-agent-checks label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #334155;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.ativelo-agent-panel > footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 13px 17px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.ativelo-agent-history,
+.ativelo-agent-enrollment {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ativelo-agent-enrollment
+  .wide {
+  grid-column: 1 / -1;
+}
+
+.ativelo-agent-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.4fr)
+    minmax(100px, .6fr)
+    minmax(150px, .8fr)
+    minmax(150px, .8fr);
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eef2f7;
+  font-size: .69rem;
+}
+
+.ativelo-agent-row span,
+.ativelo-agent-row small {
+  color: #64748b;
+}
+
+.ativelo-agent-code {
+  display: grid;
+  gap: 10px;
+  padding: 17px;
+}
+
+.ativelo-agent-code code,
+.ativelo-agent-endpoint code {
+  overflow-wrap: anywhere;
+  padding: 11px;
+  border-radius: 10px;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-size: .72rem;
+}
+
+.ativelo-agent-code p {
+  margin: 0;
+  color: #64748b;
+  font-size: .7rem;
+}
+
+.ativelo-agent-endpoint {
+  display: grid;
+  gap: 7px;
+  margin: 0 17px 17px;
+}
+
+.ativelo-agent-empty {
+  padding: 42px 18px;
+  color: #64748b;
+  font-size: .75rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .ativelo-agent-summary,
+  .ativelo-agent-cards,
+  .ativelo-agent-list,
+  .ativelo-agent-history,
+  .ativelo-agent-enrollment {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .ativelo-agent-page {
+    padding: 16px;
+  }
+
+  .ativelo-agent-summary,
+  .ativelo-agent-cards,
+  .ativelo-agent-list,
+  .ativelo-agent-history,
+  .ativelo-agent-enrollment,
+  .ativelo-agent-form {
+    grid-template-columns: 1fr;
+  }
+
+  .ativelo-agent-enrollment
+    .wide,
+  .ativelo-agent-form
+    label.wide {
+    grid-column: auto;
+  }
+
+  .ativelo-agent-row {
+    grid-template-columns: 1fr;
+  }
+}

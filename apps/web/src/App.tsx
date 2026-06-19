@@ -27,6 +27,7 @@ import type { SupportTab } from "./pages/SupportMaintenancePage";
 
 
 import SystemAuditPage from "./pages/SystemAuditPage";
+import AgentInfrastructurePage from "./pages/AgentInfrastructurePage";
 export type OrganizationContext = {
   organizationId: string;
   organizationName: string;
@@ -49,7 +50,8 @@ type AuthenticatedView =
   | "capture"
   | "auditReports"
   | "users"
-  | "systemAudit";
+  | "systemAudit"
+  | "agentInfrastructure";
 
 function AppContent() {
   const { user, isLoading } = useAuth();
@@ -266,6 +268,24 @@ function AppContent() {
       />
     );
   }
+  if (
+    view === "agentInfrastructure" &&
+    [
+      "owner",
+      "admin",
+      "it_manager",
+      "auditor",
+    ].includes(organization.role)
+  ) {
+    return (
+      <AgentInfrastructurePage
+        organization={organization}
+        onBack={() =>
+          setView("dashboard")
+        }
+      />
+    );
+  }
 if (view === "settings") {
     return (
       <SettingsPage
@@ -367,7 +387,10 @@ if (view === "settings") {
         onOpenSystemAudit={() =>
           setView("systemAudit")
         }
-      />
+
+        onOpenAgentInfrastructure={() =>
+          setView("agentInfrastructure")
+        }/>
   );
 }
 

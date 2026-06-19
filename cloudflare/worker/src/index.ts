@@ -1,3 +1,5 @@
+import { handleAgentControlRequest } from "./agentControl";
+
 interface AtiveloEnv {
   APP_ENV?: string;
   ALLOWED_ORIGIN?: string;
@@ -91,7 +93,7 @@ function getCorsHeaders(
 
   const headers: Record<string, string> = {
     "Access-Control-Allow-Headers":
-      "Authorization, Content-Type, X-Request-Id",
+      "Authorization, Content-Type, X-Request-Id, X-Ativelo-Agent-Id, X-Ativelo-Agent-Key",
     "Access-Control-Allow-Methods":
       "GET, POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
@@ -669,7 +671,16 @@ export default {
       });
     }
 
-    if (
+        const agentControlResponse =
+      await handleAgentControlRequest(
+        request,
+        env,
+      );
+
+    if (agentControlResponse) {
+      return agentControlResponse;
+    }
+if (
       request.method === "GET" &&
       url.pathname === "/"
     ) {
@@ -689,6 +700,9 @@ export default {
             "/auth/me",
             "/audit/context",
             "/audit/events",
+            "/agent/health",
+            "/agent/enroll",
+            "/agent/heartbeat",
           ],
         },
       );
@@ -711,6 +725,8 @@ export default {
           authenticationConfigured:
             isSupabaseConfigured(env),
           auditConfigured:
+            isSupabaseConfigured(env),
+          agentControlConfigured:
             isSupabaseConfigured(env),
           timestamp:
             new Date().toISOString(),

@@ -17,7 +17,8 @@ type DashboardProps = {
   onOpenAuditReports: (tab: "audits" | "reports") => void;
 
   onOpenSystemAudit: () => void;
-};
+
+  onOpenAgentInfrastructure: () => void;};
 
 type DashboardCounts = {
   total: number;
@@ -48,6 +49,8 @@ export default function Dashboard({
   onOpenAuditReports,
 
   onOpenSystemAudit,
+
+  onOpenAgentInfrastructure,
 }: DashboardProps) {
   const [counts, setCounts] = useState<DashboardCounts>({
     total: 0,
@@ -177,6 +180,25 @@ export default function Dashboard({
                 size={19}
               />
               Histórico do sistema
+            </button>
+          )}
+          {[
+            "owner",
+            "admin",
+            "it_manager",
+            "auditor",
+          ].includes(organization.role) && (
+            <button
+              type="button"
+              onClick={
+                onOpenAgentInfrastructure
+              }
+            >
+              <AppIcon
+                name="server"
+                size={19}
+              />
+              Central do agente
             </button>
           )}
           <button type="button" onClick={onOpenSettings}><span className="ativelo-menu-icon"><AppIcon name="settings" size={24}/></span><strong>Configurações</strong></button>
